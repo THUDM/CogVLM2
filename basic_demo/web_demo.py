@@ -1,0 +1,209 @@
+"""
+This is a simple chat demo using CogVLM2 model in ChainLit.
+"""
+
+import dataclasses
+from typing import List
+from PIL import Image
+import chainlit as cl
+from chainlit.input_widget import Slider
+from transformers import AutoModelForCausalLM, AutoTokenizer, TextIteratorStreamer
+from huggingface_hub.inference._text_generation import TextGenerationStreamResponse, Token
+import threading
+import torch
+
+MODEL_PATH = "THUDM/CogVLM2"
+DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
+TORCH_TYPE = torch.bfloat16 if torch.cuda.is_available() and torch.cuda.get_device_capability()[
+    0] >= 8 else torch.float16
+tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH, trust_remote_code=True)
+model = AutoModelForCausalLM.from_pretrained(MODEL_PATH, torch_dtype=TORCH_TYPE, trust_remote_code=True).to(
+    DEVICE).eval()
+
+
+@cl.on_chat_start
+def on_chat_start():
+    print("Welcome use CogVLM2 chat demo")
+
+
+async def get_response(query, history, gen_kwargs, images=None):
+    if images is None:
+        input_by_model = model.build_conversation_input_ids(
+            tokenizer,
+            query=query,
+            history=history,
+            template_version='chat'
+        )
+    else:
+        input_by_model = model.build_conversation_input_ids(
+            tokenizer,
+            query=query,
+            history=history,
+            images=images[-2:], # only use the last image
+            template_version='chat'
+        )
+
+    inputs = {
+        'input_ids': input_by_model['input_ids'].unsqueeze(0).to(DEVICE),
+        'token_type_ids': input_by_model['token_type_ids'].unsqueeze(0).to(DEVICE),
+        'attention_mask': input_by_model['attention_mask'].unsqueeze(0).to(DEVICE),
+        'images': [[input_by_model['images'][0].to(DEVICE).to(TORCH_TYPE)]] if images is not None else None,
+    }
+
+    streamer = TextIteratorStreamer(tokenizer, timeout=60.0, skip_prompt=True, skip_special_tokens=True)
+    gen_kwargs['streamer'] = streamer
+    gen_kwargs = {**gen_kwargs, **inputs}
+    with torch.no_grad():
+        thread = threading.Thread(target=model.generate, kwargs=gen_kwargs)
+        thread.start()
+        for next_text in streamer:
+            yield TextGenerationStreamResponse(
+                token=Token(
+                    id=0,
+                    logprob=0,
+                    text=next_text,
+                    special=False,
+                )
+            )
+
+
+@dataclasses.dataclass
+class Conversation:
+    """A class that keeps all conversation history."""
+    roles: List[str]
+    messages: List[List[str]]
+    version: str = "Unknown"
+
+    def append_message(self, role, message):
+        self.messages.append([role, message])
+
+    def get_prompt(self):
+        query = ""
+        history = []
+        for i, (role, msg) in enumerate(self.messages):
+            if msg:
+                query = msg[0]
+            else:
+                continue
+            if role == "USER":
+                history.append((query, ""))
+            else:
+                history[-1] = (history[-1][0], query)
+        return query, history
+
+    def get_images(self):
+        images = []
+        for i, (role, msg) in enumerate(self.messages):
+            if i % 2 == 0:
+                if isinstance(msg, tuple):
+                    from PIL import Image
+                    msg, image = msg
+                    if image is None:
+                        continue
+                    if image.mode != 'RGB':
+                        image = image.convert('RGB')
+                    width, height = image.size
+                    if width > 1344 or height > 1344:
+                        max_len = 1344
+                        aspect_ratio = width / height
+                        if width > height:
+                            new_width = max_len
+                            new_height = int(new_width / aspect_ratio)
+                        else:
+                            new_height = max_len
+                            new_width = int(new_height * aspect_ratio)
+                        image = image.resize((new_width, new_height))
+                    images.append(image)
+        return images
+
+    def copy(self):
+        return Conversation(
+            roles=self.roles,
+            messages=[[x, y] for x, y in self.messages],
+            version=self.version,
+        )
+
+    def dict(self):
+        if len(self.get_images()) > 0:
+            return {
+                "roles": self.roles,
+                "messages": [
+                    [x, y[0] if type(y) is tuple else y] for x, y in self.messages
+                ],
+            }
+        return {
+            "roles": self.roles,
+            "messages": self.messages,
+        }
+
+
+default_conversation = Conversation(
+    roles=("USER", "ASSISTANT"),
+    messages=()
+)
+
+
+async def request(conversation: Conversation, settings):
+    gen_kwargs = {
+        "temperature": settings["temperature"],
+        "top_p": settings["top_p"],
+        "max_new_tokens": int(settings["max_token"]),
+    }
+    query, history = conversation.get_prompt()
+    images = conversation.get_images()
+
+    chainlit_message = cl.Message(content="", author="CogVLM2")
+    text = ""
+    async for response in get_response(query, history, gen_kwargs, images):
+        output = response.token.text
+        text += output
+        conversation.messages[-1][-1] = text + "▌"
+        await chainlit_message.stream_token(text, is_sequence=True)
+
+    await chainlit_message.send()
+    return conversation
+
+
+@cl.on_chat_start
+async def start():
+    settings = await cl.ChatSettings(
+        [
+            Slider(id="temperature", label="Temperature", initial=0.5, min=0.01, max=1, step=0.05),
+            Slider(id="top_p", label="Top P", initial=0.7, min=0, max=1, step=0.1),
+            Slider(id="max_token", label="Max output tokens", initial=2048, min=0, max=8192, step=1),
+        ]
+    ).send()
+
+    conversation = default_conversation.copy()
+
+    cl.user_session.set("conversation", conversation)
+    cl.user_session.set("settings", settings)
+
+
+@cl.on_settings_update
+async def setup_agent(settings):
+    cl.user_session.set("settings", settings)
+
+
+@cl.on_message
+async def main(message: cl.Message):
+    image = next(
+        (
+            Image.open(file.path)
+            for file in message.elements or []
+            if "image" in file.mime and file.path is not None
+        ),
+        None,
+    )
+
+    conv = cl.user_session.get("conversation")  # type: Conversation
+    settings = cl.user_session.get("settings")
+
+    text = message.content
+
+    conv_message = (text, image)
+    conv.append_message(conv.roles[0], conv_message)
+    conv.append_message(conv.roles[1], None)
+
+    conv = await request(conv, settings)
+    cl.user_session.set("conversation", conv)
