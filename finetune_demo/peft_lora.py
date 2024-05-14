@@ -14,10 +14,10 @@ class ConversationDataset(Dataset):
                  root_dir,
                  tokenizer,
                  model,
-                 torch_type=torch.float16,
+                 torch_type=torch.bfloat16,
                  device='cuda',
-                 input_length=50,
-                 output_length=50):
+                 input_length=75,
+                 output_length=75):
         self.root_dir = root_dir
         self.tokenizer = tokenizer
         self.model = model
@@ -28,6 +28,8 @@ class ConversationDataset(Dataset):
         self.output_length = output_length
         self.device = device
         self.torch_type = torch_type
+        self.padding_len = 2306
+        self.max_length = self.input_length + self.output_length + self.padding_len
 
     def __len__(self):
         return len(self.filenames)
@@ -81,24 +83,24 @@ class ConversationDataset(Dataset):
 
         input_data['input_ids'] = pad_to_len(
             input_data['input_ids'],
-            self.input_length + 2306 + self.output_length,
+            self.max_length,
             pad_value=128002,
         )
 
         input_data['attention_mask'] = pad_to_len(
             input_data['attention_mask'],
-            self.output_length + 2306 + self.output_length,
+            self.max_length,
             pad_value=0
         )
         input_data['token_type_ids'] = pad_to_len(
             input_data['token_type_ids'],
-            self.input_length + 2306 + self.output_length,
+            self.max_length,
             pad_value=0
         )
 
         input_data['labels'] = pad_to_len(
             input_data['labels'],
-            self.input_length  + 2306 + self.output_length,
+            self.max_length,
             pad_value=-100
         )
 
@@ -107,6 +109,9 @@ class ConversationDataset(Dataset):
                 input_data[data_key] = [data.to(self.device).to(self.torch_type) for data in input_data[data_key]]
             else:
                 input_data[data_key] = input_data[data_key].to(self.device)
+
+        print(input_data["input_ids"].size())
+
         return input_data
 
 
@@ -116,7 +121,7 @@ def finetune():
     batch_size = 1
     torch_type = torch.bfloat16
     model_path = "CogVLM2"
-    dataset_path = 'CogVLM-SFT-311K/llava_instruction_single_conversation_formate'
+    dataset_path = 'llava_instruction_single_conversation_formate'
 
     tokenizer = AutoTokenizer.from_pretrained(
         pretrained_model_name_or_path=model_path,
