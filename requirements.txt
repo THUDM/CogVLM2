@@ -1,0 +1,17 @@
+# basic demo
+
+torch>=2.3.0
+torchvision>=0.18.0
+transformers>=4.40.2
+huggingface-hub>=0.23.0
+pillow>=10.3.0
+chainlit>=1.0.506
+pydantic>=2.7.1
+
+# openai demo
+fastapi>=0.111.0
+uvicorn>=0.29.0
+timm>=0.9.16
+openai>=1.28.1
+loguru>=0.7.2
+pydantic>=2.7.1
