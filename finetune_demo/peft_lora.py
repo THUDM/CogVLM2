@@ -42,7 +42,7 @@ class ConversationDataset(Dataset):
         self.tokenizer = tokenizer
         self.model = model
         self.image_dir = os.path.join(root_dir, 'images')
-        self.label_dir = os.path.join(root_dir, 'labels')
+        self.label_dir = os.path.join(root_dir, 'labels_en') # can be change to labels_en or labels_zh in SFT-311K dataset
         self.filenames = os.listdir(self.image_dir)
         self.input_length = input_length
         self.output_length = output_length
@@ -197,19 +197,17 @@ def main():
                         help="Number of warmup steps for learning rate scheduler")
     parser.add_argument("--max_input_len", type=int, default=1024, help="Maximum input length")
     parser.add_argument("--max_output_len", type=int, default=1024, help="Maximum output length")
-    parser.add_argument("--model_path", type=str, default="THDUM/CogVLM2",
+    parser.add_argument("--model_path", type=str, default="THUDM/CogVLM2",
                         help="Path to the pretrained model")
     parser.add_argument("--dataset_path", type=str,
                         default="CogVLM-SFT-311K/llava_instruction_single_conversation_formate",
                         help="Path to the conversation dataset")
-    parser.add_argument("--save_path", type=str, default="output", help="Path to save the finetuned model")
+    parser.add_argument("--save_path", type=str, default="output",
+                        help="Path to save the finetuned model, must be a exit directory")
     parser.add_argument("--ds_config", type=str, default="ds_config.yaml",
                         help="DeepSpeed configuration file path")
     args = parser.parse_args()
     args.torch_type = eval(args.torch_type)
-
-    if not os.path.exists(args.save_path):
-        os.makedirs(args.save_path)
 
     with open(args.ds_config) as f:
         ds_config = yaml.safe_load(f)
