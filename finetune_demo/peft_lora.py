@@ -197,10 +197,10 @@ def main():
                         help="Number of warmup steps for learning rate scheduler")
     parser.add_argument("--max_input_len", type=int, default=1024, help="Maximum input length")
     parser.add_argument("--max_output_len", type=int, default=1024, help="Maximum output length")
-    parser.add_argument("--model_path", type=str, default="THUDM/CogVLM2",
+    parser.add_argument("--model_path", type=str, default="/share/official_pretrains/hf_home/CogVLM2",
                         help="Path to the pretrained model")
     parser.add_argument("--dataset_path", type=str,
-                        default="CogVLM-SFT-311K/llava_instruction_single_conversation_formate",
+                        default="/share/img_datasets/CogVLM-SFT-311K/llava_instruction_single_conversation_formate",
                         help="Path to the conversation dataset")
     parser.add_argument("--save_path", type=str, default="output",
                         help="Path to save the finetuned model, must be a exit directory")
@@ -268,10 +268,6 @@ def main():
     model, train_dataloader, eval_dataloader, optimizer, lr_scheduler = accelerator.prepare(
         model, train_dataloader, eval_dataloader, optimizer, lr_scheduler
     )
-
-    for param in model.model.vision.parameters():
-        param.requires_grad = False
-
 
     logger.info("Preparation done. Starting training...")
 
