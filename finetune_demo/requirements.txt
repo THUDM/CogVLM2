@@ -1,2 +1,4 @@
 peft>=0.10.0
 deepspeed>=0.14.2
+mpi4py>=3.1.4
+tensorboard>=2.16.2
