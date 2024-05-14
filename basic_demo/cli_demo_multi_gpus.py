@@ -1,13 +1,13 @@
 """
-This is a demo for using CogVLM2 in CLI using Single GPU.
-Strongly suggest to use GPU with bfloat16 support, otherwise, it will be slow.
-Mention that only one picture can be processed at one conversation, which means you can not replace or insert another picture during the conversation.
+This is a demo for using CogVLM2 in CLI using multi-GPU with lower memory.
+If your single GPU is not enough to drive this model, you can use this demo to run this model on multiple graphics cards with limited video memory.
+Here, we default that your graphics card has 24GB of video memory, which is not enough to load the FP16 / BF16 model.
+so , need to use two graphics cards to load. We set '23GiB' for each GPU to avoid out of memory.
 """
-
 import torch
-
 from PIL import Image
 from transformers import AutoModelForCausalLM, AutoTokenizer
+from accelerate import init_empty_weights, load_checkpoint_and_dispatch, infer_auto_device_map
 
 MODEL_PATH = "THUDM/CogVLM2"
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -18,12 +18,23 @@ tokenizer = AutoTokenizer.from_pretrained(
     MODEL_PATH,
     trust_remote_code=True
 )
-model = AutoModelForCausalLM.from_pretrained(
-    MODEL_PATH,
-    torch_dtype=TORCH_TYPE,
-    trust_remote_code=True,
-    device_map="auto",
-).to(DEVICE).eval()
+
+with init_empty_weights():
+    model = AutoModelForCausalLM.from_pretrained(
+        MODEL_PATH,
+        torch_dtype=TORCH_TYPE,
+        trust_remote_code=True,
+        low_cpu_mem_usage=True
+    )
+
+device_map = infer_auto_device_map(
+    model=model,
+    max_memory={i: "23GiB" for i in range(torch.cuda.device_count())},
+    # set 23GiB for each GPU, depends on your GPU memory, you can adjust this value
+    no_split_module_classes=["CogVLMDecoderLayer"]
+)
+model = load_checkpoint_and_dispatch(model, MODEL_PATH, device_map=device_map, dtype=TORCH_TYPE)
+model = model.eval()
 
 text_only_template = "A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions. USER: {} ASSISTANT:"
 
@@ -73,10 +84,9 @@ while True:
             'attention_mask': input_by_model['attention_mask'].unsqueeze(0).to(DEVICE),
             'images': [[input_by_model['images'][0].to(DEVICE).to(TORCH_TYPE)]] if image is not None else None,
         }
-        # add any transformers params here.
         gen_kwargs = {
             "max_new_tokens": 2048,
-            "pad_token_id": 128002,  # avoid warning of llama3
+            "pad_token_id": 128002,
         }
         with torch.no_grad():
             outputs = model.generate(**inputs, **gen_kwargs)
