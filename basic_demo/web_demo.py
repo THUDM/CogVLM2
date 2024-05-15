@@ -8,7 +8,7 @@ from PIL import Image
 import chainlit as cl
 from chainlit.input_widget import Slider
 from transformers import AutoModelForCausalLM, AutoTokenizer, TextIteratorStreamer
-from huggingface_hub.inference._text_generation import TextGenerationStreamResponse, Token
+from huggingface_hub.inference._generated.types import TextGenerationStreamOutput, TextGenerationStreamOutputToken
 import threading
 import torch
 
@@ -27,7 +27,9 @@ def on_chat_start():
 
 
 async def get_response(query, history, gen_kwargs, images=None):
+    print(history, query,images)
     if images is None:
+
         input_by_model = model.build_conversation_input_ids(
             tokenizer,
             query=query,
@@ -39,7 +41,7 @@ async def get_response(query, history, gen_kwargs, images=None):
             tokenizer,
             query=query,
             history=history,
-            images=images[-2:], # only use the last image
+            images=images[-1:],  # only use the last image, CogVLM2 only support one image
             template_version='chat'
         )
 
@@ -57,8 +59,9 @@ async def get_response(query, history, gen_kwargs, images=None):
         thread = threading.Thread(target=model.generate, kwargs=gen_kwargs)
         thread.start()
         for next_text in streamer:
-            yield TextGenerationStreamResponse(
-                token=Token(
+            yield TextGenerationStreamOutput(
+                index=0,
+                token=TextGenerationStreamOutputToken(
                     id=0,
                     logprob=0,
                     text=next_text,
@@ -78,43 +81,55 @@ class Conversation:
         self.messages.append([role, message])
 
     def get_prompt(self):
-        query = ""
+        if not self.messages:
+            return None, []
+
+        last_role, last_msg = self.messages[-2]
+        if isinstance(last_msg, tuple):
+            query, _ = last_msg
+        else:
+            query = last_msg
+
         history = []
-        for i, (role, msg) in enumerate(self.messages):
-            if msg:
-                query = msg[0]
+        for role, msg in self.messages[:-2]:
+            if isinstance(msg, tuple):
+                text, _ = msg
             else:
-                continue
+                text = msg
+
             if role == "USER":
-                history.append((query, ""))
+                history.append((text, ""))
             else:
-                history[-1] = (history[-1][0], query)
+                if history:
+                    history[-1] = (history[-1][0], text)
+
         return query, history
 
     def get_images(self):
-        images = []
-        for i, (role, msg) in enumerate(self.messages):
-            if i % 2 == 0:
-                if isinstance(msg, tuple):
-                    from PIL import Image
-                    msg, image = msg
-                    if image is None:
-                        continue
-                    if image.mode != 'RGB':
-                        image = image.convert('RGB')
-                    width, height = image.size
-                    if width > 1344 or height > 1344:
-                        max_len = 1344
-                        aspect_ratio = width / height
-                        if width > height:
-                            new_width = max_len
-                            new_height = int(new_width / aspect_ratio)
-                        else:
-                            new_height = max_len
-                            new_width = int(new_height * aspect_ratio)
-                        image = image.resize((new_width, new_height))
-                    images.append(image)
-        return images
+        if not self.messages:
+            return None
+
+        role, msg = self.messages[-2]
+        if isinstance(msg, tuple):
+            from PIL import Image
+            msg, image = msg
+            if image is None:
+                return None
+            if image.mode != 'RGB':
+                image = image.convert('RGB')
+            width, height = image.size
+            if width > 1344 or height > 1344:
+                max_len = 1344
+                aspect_ratio = width / height
+                if width > height:
+                    new_width = max_len
+                    new_height = int(new_width / aspect_ratio)
+                else:
+                    new_height = max_len
+                    new_width = int(new_height * aspect_ratio)
+                image = image.resize((new_width, new_height))
+            return [image]
+        return None
 
     def copy(self):
         return Conversation(
