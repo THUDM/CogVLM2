@@ -8,7 +8,7 @@ from PIL import Image
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 ## Loading PEFT model
-MODEL_PATH = "THUDM/CogVLM2"  # The path to the base model (read tokenizer only)
+MODEL_PATH = "THUDM/cogvlm2-llama3-chat-19B"  # The path to the base model (read tokenizer only)
 PEFT_MODEL_PATH = "/output/checkpoint_epoch_0_step_50"  # The path to the PEFT model
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 TORCH_TYPE = torch.bfloat16 if torch.cuda.is_available() and torch.cuda.get_device_capability()[0] >= 8 else torch.float16

@@ -42,7 +42,8 @@ class ConversationDataset(Dataset):
         self.tokenizer = tokenizer
         self.model = model
         self.image_dir = os.path.join(root_dir, 'images')
-        self.label_dir = os.path.join(root_dir, 'labels_en') # can be change to labels_en or labels_zh in SFT-311K dataset
+        self.label_dir = os.path.join(root_dir,
+                                      'labels_en')  # can be change to labels_en or labels_zh in SFT-311K dataset
         self.filenames = os.listdir(self.image_dir)
         self.input_length = input_length
         self.output_length = output_length
@@ -184,7 +185,7 @@ def main():
     parser.add_argument("--num_epochs", type=int, default=5, help="Number of epochs")
     parser.add_argument("--batch_size", type=int, default=2, help="Batch size")
     parser.add_argument("--torch_type", type=str, default="torch.bfloat16", help="Torch type")
-    parser.add_argument("--save_step", type=int, default=50, help="Steps between checkpoints")
+    parser.add_argument("--save_step", type=int, default=100, help="Steps between checkpoints")
     parser.add_argument("--train_dataset_rate", type=float, default=0.8,
                         help="Proportion of dataset to use for training")
     parser.add_argument("--local_rank", type=int, default=-1, help="Local rank for distributed training")
@@ -197,10 +198,11 @@ def main():
                         help="Number of warmup steps for learning rate scheduler")
     parser.add_argument("--max_input_len", type=int, default=1024, help="Maximum input length")
     parser.add_argument("--max_output_len", type=int, default=1024, help="Maximum output length")
-    parser.add_argument("--model_path", type=str, default="/share/official_pretrains/hf_home/CogVLM2",
+    parser.add_argument("--model_path", type=str,
+                        default="THUDM/cogvlm2-llama3-chat-19B",
                         help="Path to the pretrained model")
     parser.add_argument("--dataset_path", type=str,
-                        default="/share/img_datasets/CogVLM-SFT-311K/llava_instruction_single_conversation_formate",
+                        default="CogVLM-SFT-311K/llava_instruction_multi_conversations_formate",
                         help="Path to the conversation dataset")
     parser.add_argument("--save_path", type=str, default="output",
                         help="Path to save the finetuned model, must be a exit directory")
@@ -292,7 +294,6 @@ def main():
                 optimizer.step()
                 lr_scheduler.step()
                 optimizer.zero_grad()
-
                 if (step + 1) % args.save_step == 0:
                     print(f"Epoch {epoch}, Step {step + 1}, Loss {loss.item()}")
                     checkpoint_path = os.path.join(args.save_path, f'checkpoint_epoch_{epoch}_step_{step + 1}')
@@ -336,7 +337,7 @@ def main():
                 outputs = accelerator.pad_across_processes(outputs, dim=1, pad_index=tokenizer.pad_token_id)
                 preds = accelerator.gather_for_metrics(outputs)
                 preds = preds[:, args.max_input_len + args.max_output_len:].detach().cpu().numpy()
-                eval_preds.extend(tokenizer.batch_decode(preds, skip_special_tokens=True))
+                eval_preds.extend(tokenizer.batch_decode(preds, skip_special_tokens=True, padding_size="left"))
 
         accelerator.print(f"GPU Memory before entering the eval : {b2mb(tracemalloc.begin)}")
         accelerator.print(f"GPU Memory consumed at the end of the eval (end-begin): {tracemalloc.used}")
@@ -352,21 +353,6 @@ def main():
             f"CPU Total Peak Memory consumed during the eval (max): {tracemalloc.cpu_peaked + b2mb(tracemalloc.cpu_begin)}"
         )
 
-        correct = 0
-        total = 0
-        assert len(eval_preds) == len(
-            dataset["train"]["text_label"]
-        ), f"{len(eval_preds)} != {len(dataset['train']['text_label'])}"
-        for pred, true in zip(eval_preds, dataset["train"]["text_label"]):
-            if pred.strip() == true.strip():
-                correct += 1
-            total += 1
-        accuracy = correct / total * 100
-        accelerator.print(f"{accuracy=}")
-        accelerator.print(f"{eval_preds[:10]=}")
-        accelerator.print(f"{dataset['train']['text_label'][:10]=}")
-
-        writer.add_scalar('Eval/Accuracy', accuracy, epoch)
         writer.add_scalar('Eval/Perplexity', torch.exp(train_epoch_loss), epoch)
         writer.add_scalar('Eval/Epoch_Loss', train_epoch_loss, epoch)
 

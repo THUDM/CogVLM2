@@ -12,7 +12,7 @@ from huggingface_hub.inference._generated.types import TextGenerationStreamOutpu
 import threading
 import torch
 
-MODEL_PATH = "THUDM/CogVLM2"
+MODEL_PATH = "THUDM/cogvlm2-llama3-chat-19B"
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 TORCH_TYPE = torch.bfloat16 if torch.cuda.is_available() and torch.cuda.get_device_capability()[
     0] >= 8 else torch.float16
@@ -27,9 +27,7 @@ def on_chat_start():
 
 
 async def get_response(query, history, gen_kwargs, images=None):
-    print(history, query,images)
     if images is None:
-
         input_by_model = model.build_conversation_input_ids(
             tokenizer,
             query=query,
@@ -106,29 +104,25 @@ class Conversation:
         return query, history
 
     def get_images(self):
-        if not self.messages:
-            return None
-
-        role, msg = self.messages[-2]
-        if isinstance(msg, tuple):
-            from PIL import Image
-            msg, image = msg
-            if image is None:
-                return None
-            if image.mode != 'RGB':
-                image = image.convert('RGB')
-            width, height = image.size
-            if width > 1344 or height > 1344:
-                max_len = 1344
-                aspect_ratio = width / height
-                if width > height:
-                    new_width = max_len
-                    new_height = int(new_width / aspect_ratio)
-                else:
-                    new_height = max_len
-                    new_width = int(new_height * aspect_ratio)
-                image = image.resize((new_width, new_height))
-            return [image]
+        for role, msg in reversed(self.messages):
+            if isinstance(msg, tuple):
+                msg, image = msg
+                if image is None:
+                    continue
+                if image.mode != 'RGB':
+                    image = image.convert('RGB')
+                width, height = image.size
+                if width > 1344 or height > 1344:
+                    max_len = 1344
+                    aspect_ratio = width / height
+                    if width > height:
+                        new_width = max_len
+                        new_height = int(new_width / aspect_ratio)
+                    else:
+                        new_height = max_len
+                        new_width = int(new_height * aspect_ratio)
+                    image = image.resize((new_width, new_height))
+                return [image]
         return None
 
     def copy(self):
@@ -163,6 +157,8 @@ async def request(conversation: Conversation, settings):
         "temperature": settings["temperature"],
         "top_p": settings["top_p"],
         "max_new_tokens": int(settings["max_token"]),
+        "top_k": int(settings["top_k"]),
+        "do_sample": True,
     }
     query, history = conversation.get_prompt()
     images = conversation.get_images()
@@ -172,7 +168,7 @@ async def request(conversation: Conversation, settings):
     async for response in get_response(query, history, gen_kwargs, images):
         output = response.token.text
         text += output
-        conversation.messages[-1][-1] = text + "▌"
+        conversation.messages[-1][-1] = text
         await chainlit_message.stream_token(text, is_sequence=True)
 
     await chainlit_message.send()
@@ -185,6 +181,7 @@ async def start():
         [
             Slider(id="temperature", label="Temperature", initial=0.5, min=0.01, max=1, step=0.05),
             Slider(id="top_p", label="Top P", initial=0.7, min=0, max=1, step=0.1),
+            Slider(id="top_k", label="Top K", initial=5, min=0, max=50, step=1),
             Slider(id="max_token", label="Max output tokens", initial=2048, min=0, max=8192, step=1),
         ]
     ).send()

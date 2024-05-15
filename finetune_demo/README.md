@@ -1,8 +1,8 @@
 # 微调 CogVLM2 模型
 
-运行本demo来使用Lora微调CogVLM2-19B中的**语言模型**部分。
+运行本demo 来使用Lora微调 CogVLM2 中的**语言模型**部分。
 
-+ 本代码仅提供了 huggingface 版本模型 `CogVLM2-19B` 的微调示例。
++ 本代码仅提供了 huggingface 版本模型 `cogvlm2-llama3-chat-19B ` 的微调示例。
 + 仅提供了微调语言模型的示例。
 + 仅提供Lora微调示例。
 + 仅提供对话模型微调示例。
@@ -82,6 +82,9 @@ deepspeed peft_lora.py --ds_config ds_config.yaml
 +-------------------------------------------------------------+
 ```
 在代码运行中，Loss数据会被 tensorboard记录，方便可视化查看Loss收敛情况。
+```shell
+tensorboard --logdir=output
+```
 
 **注意**: 我们强烈推荐您使用 `BF16` 格式进行微调，以避免出现 Loss 为 `NaN`的问题。
 
@@ -92,3 +95,4 @@ deepspeed peft_lora.py --ds_config ds_config.yaml
 python peft_infer.py
 ```
 即可使用微调的模型进行推理。
+
