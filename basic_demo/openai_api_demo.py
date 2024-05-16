@@ -15,7 +15,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, TextIteratorStream
 from PIL import Image
 from io import BytesIO
 
-MODEL_PATH = 'THUDM/CogVLM2'
+MODEL_PATH = 'THUDM/cogvlm2-llama3-chat-19B'
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 

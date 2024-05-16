@@ -1,13 +1,16 @@
 # 微调 CogVLM2 模型
 
-运行本demo 来使用Lora微调 CogVLM2 中的**语言模型**部分。
+[Read this in English.](./README_en.md)
+
+运行本demo来使用Lora微调 CogVLM2 中的**语言模型**部分。
+
+## 注意
 
 + 本代码仅提供了 huggingface 版本模型 `cogvlm2-llama3-chat-19B ` 的微调示例。
 + 仅提供了微调语言模型的示例。
 + 仅提供Lora微调示例。
 + 仅提供对话模型微调示例。
-
-其他微调方式，需要开发者自行探索。
++ 暂不支持使用`zero3` 微调，这可能出现 模型无法读取的情况。
 
 ## 最低配置
 

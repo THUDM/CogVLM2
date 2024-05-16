@@ -1,17 +1,16 @@
 # Fine-tune the CogVLM2 model
 
-Run this demo to use Lora to fine-tune the **language model** part of CogVLM2.
+## Note
 
-+ This code only provides a fine-tuning example of the huggingface version model `cogvlm2-llama3-chat-19B`.
++ This code only provides fine-tuning examples for the huggingface version model 'cogvlm2-llama3-chat-19B'.
 + Only examples of fine-tuning language models are provided.
-+ Only Lora fine-tuning examples are provided.
-+ Provides only dialogue model fine-tuning examples.
-
-Other fine-tuning methods need to be explored by developers themselves.
++ Only provide Lora fine-tuning examples.
++ Only provide examples of fine-tuning the dialogue model.
++ We currently do not support using 'zero3' fine-tuning, which may result in the model not being able to read.
 
 ## Minimum configuration
 
-- No less than 57GB of video memory per graphics card
+- No less than 57GB of video memory per GPU
 
 
 ## Start fine-tuning

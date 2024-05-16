@@ -33,10 +33,9 @@ This license shall be governed and construed in accordance with the laws of Peop
 
 Note that the license is subject to update to a more comprehensive version.  For any questions related to the license and copyright, please contact us at license@zhipuai.cn.
 
-7. Llama2 and EVA-CLIP2 License
+7. Llama3 and EVA-CLIP2 License
 
-For CogVLM1.5-19B version, Llama2 license conditions (https://ai.meta.com/llama/license/) and EVA license conditions (MIT, https://github.com/baaivision/EVA/blob/master/LICENSE) Also applies to model weights.
-
+For the CogVLM2 open source model based on the LLama3 series model as the base model, the Llama3 license conditions (https://llama.meta.com/llama3/license/, a copy of this repository license conditions) and the EVA-CLIP2 license conditions (MIT , https://github.com/baaivision/EVA/blob/master/LICENSE) for model weights.
 
 1. 定义
 
@@ -71,6 +70,6 @@ For CogVLM1.5-19B version, Llama2 license conditions (https://ai.meta.com/llama/
 
 请注意，许可证可能会更新到更全面的版本。 有关许可和版权的任何问题，请通过 license@zhipuai.cn 与我们联系。
 
-7. Llama2 和 EVA-CLIP2 许可
+7. Llama3 和 EVA-CLIP2 许可
 
-针对 CogVLM1.5-19B 版本， Llama2 许可条件 (https://ai.meta.com/llama/license/) 和 EVA 许可条件 (MIT, https://github.com/baaivision/EVA/blob/master/LICENSE) 同时适用于模型权重。
+针对基于以 LLama3 系列模型作为基座模型的 CogVLM2 开源模型， Llama3 许可条件 (https://llama.meta.com/llama3/license/ ，本仓库副本一份许可条件) 和 EVA-CLIP2 许可条件 (MIT, https://github.com/baaivision/EVA/blob/master/LICENSE) 适用于模型权重。
