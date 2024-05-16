@@ -16,19 +16,14 @@
 📍在 <a href="https://open.bigmodel.cn/dev/api#super-humanoid">开放平台</a> 体验更大规模的 CogVLM 模型。
 </p>
 
-## 项目更新
-
-- 🔥  **News**: ```2024/5/17``` 我们开源了 `cogvlm2-llama3-chat-19B` 和 `cogvlm2-llama3-chinese-chat-19B` 两款模型。
-
-## 模型介绍
 
 我们推出了新一代的 **CogVLM2** 系列模型并开源了两款基于 [Meta-Llama-3-8B-Instruct](https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct)
 开源模型。与上一代的 CogVLM 开源模型相比，**CogVLM2** 系列开源模型具有以下改进：
 
-1. 在许多关键指标上有了显著提升。
-2. 支持 8K 文本长度。
-3. 支持高达 1344 * 1344 的图像分辨率。
-4. 提供支持中英文双语的开源模型版本。
+1. 在许多关键指标上有了显著提升，例如 `TextVQA`, `DocVQA`。
+2. 支持 **8K** 文本长度。
+3. 支持高达 **1344 * 1344** 的图像分辨率。
+4. 提供支持**中英文双语**的开源模型版本。
 
 您可以在下表中看到 **CogVLM2** 系列开源模型的详细信息：
 
@@ -69,11 +64,9 @@
 
 本开源仓库将带领开发者快速上手 **CogVLM2** 开源模型的基础调用方式、微调示例、OpenAI API格式调用示例等。具体项目结构如下，您可以点击进入对应的教程链接：
 
-+ [basic_demo](basic_demo/README.md) - 基础调用方式,包含了 CLI, WebUI 和 OpenAI API等模型推理调用方式。如果您是第一次使用
-  CogVLM2 开源模型，建议您从这里开始。
++ [basic_demo](basic_demo/README.md) - 基础调用方式,包含了 CLI, WebUI 和 OpenAI API 等模型推理调用方式。如果您是第一次使用 CogVLM2 开源模型，建议您从这里开始。
 + [finetune_demo](finetune_demo/README.md) - 微调示例，包含了微调语言模型的示例。
 
 ## 模型协议
 
-该模型根据 [CogVLM2 LICENSE](MODEL_LICENSE) 许可证发布。对于使用了 Meta Llama 3
-基座模型构建的模型，需要同时遵守 [LLAMA3_LICENSE](https://llama.meta.com/llama3/license/) 许可证。
+该模型根据 [CogVLM2 LICENSE](MODEL_LICENSE) 许可证发布。对于使用了 Meta Llama 3 基座模型构建的模型，需要同时遵守 [LLAMA3_LICENSE](https://llama.meta.com/llama3/license/) 许可证。

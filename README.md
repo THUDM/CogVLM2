@@ -15,20 +15,12 @@
 📍Experience the larger-scale CogVLM model on the <a href="https://open.bigmodel.cn/dev/api#super-humanoid">ZhipuAI Open Platform</a>.
 </p>
 
-## Project updates
+We launch a new generation of **CogVLM2** series of models and open source two models based on [Meta-Llama-3-8B-Instruct](https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct). Compared with the previous generation of CogVLM open source models, the CogVLM2 series of open source models have the following improvements:
 
-- 🔥 **News**: ```2024/5/17``` We open sourced two models `cogvlm2-llama3-chat-19B`
-  and `cogvlm2-llama3-chinese-chat-19B`.
-
-## Model introduction
-
-We launch a new generation of **CogVLM2** series of models and open source two models based on [Meta-Llama-3-8B-Instruct](https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct)
-Open source model. Compared with the previous generation of CogVLM open source models, the CogVLM2 series of open source models have the following improvements:
-
-1. Significant improvements in many key indicators.
-2. Support 8K text length.
-3. Support image resolution up to 1344 * 1344.
-4. Provide an open source model version that supports bilingual Chinese and English.
+1. Significant improvements in many benchmarks such as `TextVQA`, `DocVQA`.
+2. Support **8K** content length.
+3. Support image resolution up to **1344 * 1344**.
+4. Provide an open source model version that supports both **Chinese and English**.
 
 You can see the details of the **CogVLM2** family of open source models in the table below:
 
@@ -70,5 +62,11 @@ This open source repos will help developers to quickly get started with the basi
 source model, fine-tuning examples, OpenAI API format calling examples, etc. The specific project structure is as
 follows, you can click to enter the corresponding tutorial link:
 
-+ [basic_demo](basic_demo/README_en.md) -Basic calling methods include model inference calling methods such as CLI, WebUI and OpenAI API. If you are using the CogVLM2 open source model for the first time, we recommend you start here.
++ [basic_demo](basic_demo/README_en.md) - Basic calling methods include model inference calling methods such as CLI, WebUI and OpenAI API. If you are using the CogVLM2 open source model for the first time, we recommend you start here.
 + [finetune_demo](finetune_demo/README_en.md) - Fine-tuning examples, including examples of fine-tuning language models.
+
+## License
+
+This model is released under the CogVLM2 [LICENSE](LICENSE.md). For models built with Meta Llama 3, please also adhere to the [LLAMA3_LICENSE](LLAMA3_LICENSE.md).
+
+
