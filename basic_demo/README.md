@@ -1,41 +1,45 @@
 # Basic Demo
 
-[Read this in English.](./README_en.md)
+[中文版README清点击这里](./README_zh.md)
 
-### 最低配置要求
+### Minimum Requirements
 
-Python: 3.10.12 以上版本
+Python: 3.10.12 or above
 
-GPU要求如下表格所示
+GPU requirements are as shown in the table below:
 
-| 模型名称                   | 19B 系列模型 | 备注          |
-|------------------------|----------|-------------|
-| BF16 / FP16 推理         | 42GB     | 测试对话文本长度为2K | 
-| Int4    推理             | 16GB     | 测试对话文本长度为2K | 
-| BF16 Lora 微调 (冻结视觉专家部分） | 57GB     | 训练文本的长度为2K  |
-| BF16 Lora 微调 (含视觉专家部分） | \> 80GB   | 单卡无法微调      |
+| Model Name                                   | 19B Series Model | Remarks                      |
+|----------------------------------------------|------------------|------------------------------|
+| BF16 / FP16 Inference                        | 42GB             | Tested with 2K dialogue text |
+| Int4 Inference                               | 16GB             | Tested with 2K dialogue text |
+| BF16 Lora Tuning (Freeze Vision Expert Part) | 57GB             | Training text length is 2K   |
+| BF16 Lora Tuning (With Vision Expert Part)   | \> 80GB          | Single GPU cannot tune       |
 
-
-在运行任何代码之前，请确保你已经安装好了所有的依赖包。你可以通过以下命令来安装所有的依赖包：
+Before running any code, make sure you have all dependencies installed. You can install all dependency packages with the
+following command:
 
 ```shell
 pip install -r requirements.txt
 ```
 
-## CLI 调用模型 
+## Using CLI Demo
 
-运行本代码以开始在命令行中对话。请注意，模型必须在一张GPU上载入
+Run this code to start a conversation at the command line. Please note that the model must be loaded on a GPU
 
 ```shell
 CUDA_VISIBLE_DEVICES=0 python cli_demo.py
 ```
 
-如果您有多张GPU，您可以通过以下代码执行多卡拉起模型，并将模型的不同层分布在不同的GPU上。
-    
+If you have multiple GPUs, you can use the following code to perform multiple pull-up models and distribute different
+layers of the model on different GPUs.
+
 ```shell
 python cli_demo_multi_gpu.py
 ```
-在 `cli_demo_multi_gpu.py` 中，我们使用了 `infer_auto_device_map` 函数来自动分配模型的不同层到不同的GPU上。你需要设置 `max_memory` 参数来指定每张GPU的最大内存。例如，如果你有两张GPU，每张GPU的内存为23GiB，你可以这样设置：
+
+In `cli_demo_multi_gpu.py`, we use the `infer_auto_device_map` function to automatically allocate different layers of
+the model to different GPUs. You need to set the `max_memory` parameter to specify the maximum memory for each GPU. For
+example, if you have two GPUs, each with 23GiB of memory, you can set it like this:
 
 ```python
 device_map = infer_auto_device_map(
@@ -45,30 +49,29 @@ device_map = infer_auto_device_map(
     no_split_module_classes=["CogVLMDecoderLayer"]
 )
 ```
-## Web端在线调用模型
 
-运行本代码以开始在 WebUI 中对话。
+## Using Web Demo
+
+Run this code to start a conversation in the WebUI.
 
 ```shell
 chainlit run web_demo.py
 ```
-拉起对话后，你将能和模型进行对话，效果如下：
+
+After starting the conversation, you will be able to interact with the model, as shown below:
 
 <img src="../resources/web_demo.png" alt="web_demo" width="600" />
 
+## Using OpenAI API format
 
-## OpenAI API
+We provide a simple example to pull up the model through the following code. After that, you can use the OpenAI API
+format to request a conversation with the model.
 
-我们提供了一个简单的示例，通过以下代码拉起模型，之后，您可以使用 OpenAI API格式的方式请求和模型的对话。
 ```shell
 python openai_api_demo.py
 ```
-开发者可以通过以下代码来调用模型：
+
+Developers can call the model through the following code:
 
 ```shell
 python openai_api_request.py
-```
-
-
-
-

@@ -1,73 +1,86 @@
-# 微调 CogVLM2 模型
+# Fine-tune the CogVLM2 model
 
-[Read this in English.](./README_en.md)
+[中文版README清点击这里](./README_zh.md)
 
-运行本demo来使用Lora微调 CogVLM2 中的**语言模型**部分。
+## Note
 
-## 注意
++ This code only provides fine-tuning examples for the huggingface version model 'cogvlm2-llama3-chat-19B'.
++ Only examples of fine-tuning language models are provided.
++ Only provide Lora fine-tuning examples.
++ Only provide examples of fine-tuning the dialogue model.
++ We currently do not support using 'zero3' fine-tuning, which may result in the model not being able to read.
 
-+ 本代码仅提供了 huggingface 版本模型 `cogvlm2-llama3-chat-19B ` 的微调示例。
-+ 仅提供了微调语言模型的示例。
-+ 仅提供Lora微调示例。
-+ 仅提供对话模型微调示例。
-+ 暂不支持使用`zero3` 微调，这可能出现 模型无法读取的情况。
+## Minimum configuration
 
-## 最低配置
+- No less than 57GB of video memory per GPU
 
-- 每张显卡不少于 57GB 显存
+## Start fine-tuning
 
+1. Download the data set and install dependencies
 
-## 开始微调
+In this demo, developers can use the [CogVLM-SFT-311K](https://huggingface.co/datasets/THUDM/CogVLM-SFT-311K) open
+source data set provided by us or build their own data set in the same format for fine-tuning. .
 
-1. 下载数据集和安装依赖
+The data format is as follows:
 
-本demo中，开发者可以使用由我们提供[CogVLM-SFT-311K](https://huggingface.co/datasets/THUDM/CogVLM-SFT-311K)开源数据集或自行构建相同格式的数据集进行微调。
++ The data set consists of two folders, `images` and `labels` (in CogVLM-SFT-311K, they are `labels_en` and `labels_zh`,
+  corresponding to Chinese and English labels respectively.
+  In the fine-tuning code, you can modify these two lines of code to modify the folder name.
 
-数据格式如下:
-+ 数据集由 `images` 和 `labels` 两个文件夹组成 （在 CogVLM-SFT-311K 中 为 `labels_en` 和 `labels_zh`，分别对应中英文标签。
-在微调代码中，你可以修改这两行代码来修改文件夹名称。
 ```python
 self.image_dir = os.path.join(root_dir, 'images')
-self.label_dir = os.path.join(root_dir, 'labels_en')  # or 'labels_zh' or 'labels' 可以自行修改
+self.label_dir = os.path.join(root_dir, 'labels_en')  # or 'labels_zh' or 'labels' can be modified by yourself
 ```
-+ `images` 文件夹中存放了图片文件，`labels` 文件夹中存放了对应的标签文件。图片和标签文件的名称一一对应。图片文件的格式为 `jpg`，标签文件的格式为 `json`。
-+ 每个标签文件中包含了一段对话，对话由 `user` 和 `assistant` 两个角色组成，每个角色的对话内容由 `role` 和 `content` 两个字段组成。如下字段所示。
+
++ Image files are stored in the `images` folder, and corresponding label files are stored in the `labels` folder. There
+  is a one-to-one correspondence between the names of pictures and label files. The format of image files is `jpg`, and
+  the format of label files is `json`.
++ Each tag file contains a dialogue. The dialogue consists of two roles: `user` and `assistant`. The dialogue content of
+  each role consists of two fields: `role` and `content`. As shown in the fields below.
+
 ```
 {
-  "conversations": [
-    {
-      "role": "user",
-      "content": "What can be inferred about the zebras' behavior and surroundings?"
-    },
-    {
-      "role": "assistant",
-      "content": "Based on the image, we can infer that the two zebras are likely seeking relief from the sun's heat, as they are standing side by side under the branches of a thorny tree. This shade-providing tree offers some respite from the sun, possibly during the hottest part of the day. The zebras are in a green field with grass, providing them with an ideal environment to graze and eat while staying near their source of shelter. This shows that the zebras' behavior is influenced by the conditions and available resources in their surroundings. It also highlights that these animals adopt strategies to adapt to the fluctuating conditions of their environment, such as cooperation and seeking shelter, to survive and thrive in their natural habitat."
-    }
-  ]
+   "conversations": [
+     {
+       "role": "user",
+       "content": "What can be inferred about the zebras' behavior and surroundings?"
+     },
+     {
+       "role": "assistant",
+       "content": "Based on the image, we can infer that the two zebras are likely seeking relief from the sun's heat, as they are standing side by side under the branches of a thorny tree. This shade-providing tree offers some respite from the sun, possibly during the hottest part of the day. The zebras are in a green field with grass, providing them with an ideal environment to graze and eat while staying near their source of shelter. This shows that the zebras' behavior is influenced by the conditions and available resources in their surroundings. It also highlights that these animals adopt strategies to adapt to the fluctuating conditions of their environment, such as cooperation and seeking shelter, to survive and thrive in their natural habitat."
+     }
+   ]
 }
 ```
 
+Before starting fine-tuning, you need to install the relevant dependencies.
 
-在开始微调之前，需要安装相关的依赖。
 ```bash
 pip install -r requirements.txt
 ```
-**注意**: `mpi4py` 可能需要安装别的 Linux 依赖包。请根据您的系统环境自行安装。
 
-2. 运行微调程序
+**Note**: `mpi4py` may need to install other Linux dependency packages. Please install it yourself according to your
+system environment.
 
-我们提供了使用单机多卡（包含单卡）的微调脚本 `peft_lora.py`。您可以通过运行以下命令来启动微调。
+2. Run the fine-tuning program
+
+We provide a fine-tuning script `peft_lora.py` that uses multiple cards on a single machine (including a single card).
+You can start fine-tuning by running the following command.
+
 ```bash
 deepspeed peft_lora.py --ds_config ds_config.yaml
 ```
-下图展现了微调过程中的显存占用情况
 
-参数信息：
+The figure below shows the memory usage during fine-tuning.
+
+Parameter information:
+
 + `max_input_len`: 1024
 + `max_output_len`: 1024
 + `batch_size`: 2
 
-显存占用情况：
+GPU memory usage:
+
 ```shell
 +-------------------------------------------------------------+
 | Processes:                                                  |
@@ -84,18 +97,22 @@ deepspeed peft_lora.py --ds_config ds_config.yaml
 |    7   N/A  N/A    704921      C   python          72442MiB |
 +-------------------------------------------------------------+
 ```
-在代码运行中，Loss数据会被 tensorboard记录，方便可视化查看Loss收敛情况。
+
+While the code is running, Loss data will be recorded by tensorboard to facilitate visual viewing of Loss convergence.
+
 ```shell
 tensorboard --logdir=output
 ```
 
-**注意**: 我们强烈推荐您使用 `BF16` 格式进行微调，以避免出现 Loss 为 `NaN`的问题。
+**Note**: We strongly recommend that you use the `BF16` format for fine-tuning to avoid the problem of Loss being `NaN`.
 
-3. 推理微调后的模型
+3. Inference on the fine-tuned model
 
-运行 `peft_infer.py`，你可以使用微调后的模型生成文本。您需要按照代码中的配置要求，配置微调后的模型地址。然后运行:
+By running `peft_infer.py` you can use the fine-tuned model to generate text. You need to configure the fine-tuned model
+address according to the configuration requirements in the code. Then run:
+
 ```shell
-python peft_infer.py
+pythonpeft_infer.py
 ```
-即可使用微调的模型进行推理。
 
+You can use the fine-tuned model for inference.
