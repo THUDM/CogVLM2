@@ -1,9 +1,9 @@
 # CogVLM2
 
-[中文版README请点击这里](./README_zh.md)
+[中文版README](./README_zh.md)
 
 <div align="center">
-<img src=resources/logo.svg width="10%"/>
+<img src=resources/logo.svg width="20%"/>
 </div>
 <p align="center">
 🤗 <a href="https://huggingface.co/THUDM/CogVLM2" target="_blank">HF Repo</a> • 🤖 <a href="https://modelscope.cn/models/ZhipuAI/CogVLM2" target="_blank">魔搭社区</a>
@@ -41,6 +41,7 @@ Our open source models have achieved good results in many lists compared to the 
 
 | Model                          | Open Source | LLM Size | TextVQA  | DocVQA   | ChartQA  | OCRbench | MMMU     | MMVet    | MMBench  |
 |--------------------------------|-------------|----------|----------|----------|----------|----------|----------|----------|----------|
+| CogVLM1.1            | ✅           | 7B       | 69.7     | -        | 68.3     | 590      | 37.3     | 52.0     | 65.8     |
 | LLaVA-1.5                      | ✅           | 13B      | 61.3     | -        | -        | 337      | 37.0     | 35.4     | 67.7     |
 | Mini-Gemini                    | ✅           | 34B      | 74.1     | -        | -        | -        | 48.0     | 59.3     | 80.6     |
 | LLaVA-NeXT-LLaMA3              | ✅           | 8B       | -        | 78.2     | 69.5     | -        | 41.7     | -        | 72.1     |
@@ -50,9 +51,8 @@ Our open source models have achieved good results in many lists compared to the 
 | Claude3-Opus                   | ❌           | -        | -        | 89.3     | 80.8     | 694      | **59.4** | 51.7     | 63.3     |
 | Gemini Pro 1.5                 | ❌           | -        | 73.5     | 86.5     | 81.3     | -        | 58.5     | -        | -        |
 | GPT-4V                         | ❌           | -        | 78.0     | 88.4     | 78.5     | 656      | 56.8     | **67.7** | 75.0     |
-| CogVLM1.1 (Ours)               | ✅           | 7B       | 69.7     | -        | 68.3     | 590      | 37.3     | 52.0     | 65.8     |
-| CogVLM2-LLaMA3 (Ours)          | ✅           | 8B       | 84.2     | **92.3** | 81.0     | 756      | 44.3     | 60.4     | 80.5     |
-| CogVLM2-LLaMA3-Chinese  (Ours) | ✅           | 8B       | **85.0** | 88.4     | 74.7     | **780**  | 42.8     | 60.5     | 78.9     |
+| **CogVLM2-LLaMA3**         | ✅           | 8B       | 84.2     | **92.3** | 81.0     | 756      | 44.3     | 60.4     | 80.5     |
+| **CogVLM2-LLaMA3-Chinese** | ✅           | 8B       | **85.0** | 88.4     | 74.7     | **780**  | 42.8     | 60.5     | 78.9     |
 
 All reviews were obtained without using any external OCR tools ("pixel only").
 
@@ -69,4 +69,17 @@ follows, you can click to enter the corresponding tutorial link:
 
 This model is released under the CogVLM2 [LICENSE](LICENSE.md). For models built with Meta Llama 3, please also adhere to the [LLAMA3_LICENSE](LLAMA3_LICENSE.md).
 
+## Citation
 
+If you find our work helpful, please consider citing the following papers
+
+```
+@misc{wang2023cogvlm,
+      title={CogVLM: Visual Expert for Pretrained Language Models}, 
+      author={Weihan Wang and Qingsong Lv and Wenmeng Yu and Wenyi Hong and Ji Qi and Yan Wang and Junhui Ji and Zhuoyi Yang and Lei Zhao and Xixuan Song and Jiazheng Xu and Bin Xu and Juanzi Li and Yuxiao Dong and Ming Ding and Jie Tang},
+      year={2023},
+      eprint={2311.03079},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+```
