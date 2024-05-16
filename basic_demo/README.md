@@ -1,6 +1,6 @@
 # Basic Demo
 
-[中文版README请点击这里](./README_zh.md)
+[中文版README](./README_zh.md)
 
 ### Minimum Requirements
 
