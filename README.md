@@ -1,9 +1,9 @@
 # CogVLM2
 
-[中文版README清点击这里](./README_zh.md)
+[中文版README](./README_zh.md)
 
 <div align="center">
-<img src=resources/logo.svg width="10%"/>
+<img src=resources/logo.svg width="20%"/>
 </div>
 <p align="center">
 🤗 <a href="https://huggingface.co/THUDM/CogVLM2" target="_blank">HF Repo</a> • 🤖 <a href="https://modelscope.cn/models/ZhipuAI/CogVLM2" target="_blank">魔搭社区</a>
