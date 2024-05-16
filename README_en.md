@@ -36,14 +36,14 @@ many lists. Its excellent performance can compete with some non-open source mode
 | Mini-Gemini                    | 74.1     | -        | -       | -        | 48.0     | 59.3     | 80.6     |
 | LLaVA-NeXT-LLaMA3              | -        | 78.2     | 69.5    | -        | 41.7     | -        | 72.1     |
 | LLaVA-NeXT-110B                | -        | 85.7     | 79.7    | -        | 49.1     | -        | 80.5     |
-| InternVL-1.5                   | 80.6     | 90.9     | 83.8    | 720      | 46.8     | 55.4     | 82.3     |
+| InternVL-1.5                   | 80.6     | 90.9     | **83.8**    | 720      | 46.8     | 55.4     | **82.3**     |
 | QwenVL-Plus                    | 78.9     | 91.4     | 78.1    | 726      | 51.4     | 55.7     | 67.0     |
 | Claude3-Opus                   | -        | 89.3     | 80.8    | 694      | **59.4** | 51.7     | 63.3     |
 | Gemini Pro 1.5                 | 73.5     | 86.5     | 81.3    | -        | 58.5     | -        | -        |
 | GPT-4V                         | 78.0     | 88.4     | 78.5    | 656      | 56.8     | **67.7** | 75.0     |
-| cogvlm1.1 (Ours)               | 69.7     | -        | 68.3    | 590      | 37.3     | 52.0     | 65.8     |
-| cogvlm2-llama3 (Ours)          | 84.2     | **92.3** | 81.0    | 756      | 43.3     | 60.4     | **80.5** |
-| cogvlm2-llama3-chinese  (Ours) | **85.0** | 88.4     | 74.7    | **780**  | 39.9     | 60.5     | 78.9     |
+| CogVLM1.1 (Ours)               | 69.7     | -        | 68.3    | 590      | 37.3     | 52.0     | 65.8     |
+| CogVLM2-LLaMA3 (Ours)          | 84.2     | **92.3** | 81.0    | 756      | 44.3     | 60.4     | 80.5 |
+| CogVLM2-LLaMA3-Chinese  (Ours) | **85.0** | 88.4     | 74.7    | **780**  | 42.8     | 60.5     | 78.9     |
 
 All reviews were obtained without using any external OCR tools ("pixel only").
 
