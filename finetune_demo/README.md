@@ -1,6 +1,6 @@
 # Fine-tune the CogVLM2 model
 
-[中文版README清点击这里](./README_zh.md)
+[中文版README请点击这里](./README_zh.md)
 
 ## Note
 

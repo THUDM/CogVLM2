@@ -1,6 +1,6 @@
 # CogVLM2
 
-[中文版README清点击这里](./README_zh.md)
+[中文版README请点击这里](./README_zh.md)
 
 <div align="center">
 <img src=resources/logo.svg width="10%"/>
