@@ -70,3 +70,19 @@
 ## 模型协议
 
 该模型根据 [CogVLM2 LICENSE](MODEL_LICENSE) 许可证发布。对于使用了 Meta Llama 3 基座模型构建的模型，需要同时遵守 [LLAMA3_LICENSE](https://llama.meta.com/llama3/license/) 许可证。
+
+
+## 引用
+
+如果您发现我们的工作有所帮助，请考虑引用以下论文:
+
+```
+@misc{wang2023cogvlm,
+      title={CogVLM: Visual Expert for Pretrained Language Models}, 
+      author={Weihan Wang and Qingsong Lv and Wenmeng Yu and Wenyi Hong and Ji Qi and Yan Wang and Junhui Ji and Zhuoyi Yang and Lei Zhao and Xixuan Song and Jiazheng Xu and Bin Xu and Juanzi Li and Yuxiao Dong and Ming Ding and Jie Tang},
+      year={2023},
+      eprint={2311.03079},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+```
