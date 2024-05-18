@@ -3,7 +3,7 @@
 [中文版README](./README_zh.md)
 
 <div align="center">
-<img src=resources/logo.svg width="20%"/>
+<img src=resources/logo.svg width="40%"/>
 </div>
 <p align="center">
 🤗 <a href="https://huggingface.co/THUDM/CogVLM2" target="_blank">HF Repo</a> • 🤖 <a href="https://modelscope.cn/models/ZhipuAI/CogVLM2" target="_blank">魔搭社区</a>

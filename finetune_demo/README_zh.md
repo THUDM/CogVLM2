@@ -53,7 +53,7 @@ self.label_dir = os.path.join(root_dir, 'labels_en')  # or 'labels_zh' or 'label
 }
 ```
 
-在开始微调之前，需要安装相关的依赖。
+在开始微调之前，需要安装相关的依赖。请注意，你还需要安装好 [basic_demo](../basic_demo/requirements.txt) 中的依赖。
 
 ```bash
 pip install -r requirements.txt

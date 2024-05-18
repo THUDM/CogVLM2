@@ -53,7 +53,7 @@ self.label_dir = os.path.join(root_dir, 'labels_en')  # or 'labels_zh' or 'label
 }
 ```
 
-Before starting fine-tuning, you need to install the relevant dependencies.
+Before starting fine-tuning, you need to install the relevant dependencies. you also need to install the dependencies in the  [basic_demo](../basic_demo/requirements.txt).
 
 ```bash
 pip install -r requirements.txt

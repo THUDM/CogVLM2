@@ -1,3 +1,4 @@
+xformers>=0.0.26.post1
 torch>=2.3.0
 torchvision>=0.18.0
 transformers>=4.40.2
