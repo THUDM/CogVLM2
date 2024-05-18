@@ -7,9 +7,6 @@
 <img src=resources/logo.svg width="40%"/>
 </div>
 <p align="center">
-🤗 <a href="https://huggingface.co/THUDM/CogVLM2" target="_blank">HF Repo</a> • 🤖 <a href="https://modelscope.cn/models/ZhipuAI/CogVLM2" target="_blank">魔搭社区</a>
-</p>
-<p align="center">
     👋 加入我们的 <a href="resources/WECHAT.md" target="_blank">微信</a>
 </p>
 <p align="center">
@@ -17,7 +14,8 @@
 </p>
 
 
-我们推出了新一代的 **CogVLM2** 系列模型并开源了两款基于 [Meta-Llama-3-8B-Instruct](https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct)
+我们推出了新一代的 **CogVLM2**
+系列模型并开源了两款基于 [Meta-Llama-3-8B-Instruct](https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct)
 开源模型。与上一代的 CogVLM 开源模型相比，**CogVLM2** 系列开源模型具有以下改进：
 
 1. 在许多关键指标上有了显著提升，例如 `TextVQA`, `DocVQA`。
@@ -27,17 +25,16 @@
 
 您可以在下表中看到 **CogVLM2** 系列开源模型的详细信息：
 
-| 模型名称   | cogvlm2-llama3-chat-19B             | cogvlm2-llama3-chinese-chat-19B     |
-|--------|-------------------------------------|-------------------------------------|
-| 基座模型   | Meta-Llama-3-8B-Instruct            | Meta-Llama-3-8B-Instruct            |
-| 语言     | 英文                                  | 中文、英文                               |
-| 模型大小   | 19B                                 | 19B                                 |
-| 任务     | 图像理解，对话模型                           | 图像理解，对话模型                           |
-| 模型链接   | [🤗 Huggingface]() [🤖ModelScope]() | [🤗 Huggingface]() [🤖ModelScope]() |
-| Int4模型 | 暂未推出                                | 暂未推出                                |
-| 文本长度   | 8K                                  | 8K                                  |
-| 图片分辨率  | 1344 * 1344                         | 1344 * 1344                         |
-
+| 模型名称   | cogvlm2-llama3-chat-19B                                                                                                                              | cogvlm2-llama3-chinese-chat-19B                                                                                                                                      |
+|--------|------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 基座模型   | Meta-Llama-3-8B-Instruct                                                                                                                             | Meta-Llama-3-8B-Instruct                                                                                                                                             |
+| 语言     | 英文                                                                                                                                                   | 中文、英文                                                                                                                                                                |
+| 模型大小   | 19B                                                                                                                                                  | 19B                                                                                                                                                                  |
+| 任务     | 图像理解，对话模型                                                                                                                                            | 图像理解，对话模型                                                                                                                                                            |
+| 模型链接   | [🤗 Huggingface](https://huggingface.co/THUDM/cogvlm2-llama3-chat-19B) [🤖ModelScope](https://modelscope.cn/models/ZhipuAI/cogvlm2-llama3-chat-19B/) | [🤗 Huggingface](https://huggingface.co/THUDM/cogvlm2-llama3-chinese-chat-19B) [🤖ModelScope](https://modelscope.cn/models/ZhipuAI/cogvlm2-llama3-chinese-chat-19B/) |
+| Int4模型 | 暂未推出                                                                                                                                                 | 暂未推出                                                                                                                                                                 |
+| 文本长度   | 8K                                                                                                                                                   | 8K                                                                                                                                                                   |
+| 图片分辨率  | 1344 * 1344                                                                                                                                          | 1344 * 1344                                                                                                                                                          |
 
 ## Benchmark
 
@@ -64,13 +61,14 @@
 
 本开源仓库将带领开发者快速上手 **CogVLM2** 开源模型的基础调用方式、微调示例、OpenAI API格式调用示例等。具体项目结构如下，您可以点击进入对应的教程链接：
 
-+ [basic_demo](basic_demo/README.md) - 基础调用方式,包含了 CLI, WebUI 和 OpenAI API 等模型推理调用方式。如果您是第一次使用 CogVLM2 开源模型，建议您从这里开始。
++ [basic_demo](basic_demo/README.md) - 基础调用方式,包含了 CLI, WebUI 和 OpenAI API 等模型推理调用方式。如果您是第一次使用
+  CogVLM2 开源模型，建议您从这里开始。
 + [finetune_demo](finetune_demo/README.md) - 微调示例，包含了微调语言模型的示例。
 
 ## 模型协议
 
-该模型根据 [CogVLM2 LICENSE](MODEL_LICENSE) 许可证发布。对于使用了 Meta Llama 3 基座模型构建的模型，需要同时遵守 [LLAMA3_LICENSE](https://llama.meta.com/llama3/license/) 许可证。
-
+该模型根据 [CogVLM2 LICENSE](MODEL_LICENSE) 许可证发布。对于使用了 Meta Llama 3
+基座模型构建的模型，需要同时遵守 [LLAMA3_LICENSE](https://llama.meta.com/llama3/license/) 许可证。
 
 ## 引用
 

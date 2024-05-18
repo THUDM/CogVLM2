@@ -5,9 +5,7 @@
 <div align="center">
 <img src=resources/logo.svg width="40%"/>
 </div>
-<p align="center">
-🤗 <a href="https://huggingface.co/THUDM/CogVLM2" target="_blank">HF Repo</a> • 🤖 <a href="https://modelscope.cn/models/ZhipuAI/CogVLM2" target="_blank">魔搭社区</a>
-</p>
+
 <p align="center">
     👋 Join our <a href="resources/WECHAT.md" target="_blank">Wechat</a>
 </p>
@@ -24,16 +22,16 @@ We launch a new generation of **CogVLM2** series of models and open source two m
 
 You can see the details of the **CogVLM2** family of open source models in the table below:
 
-| Model name       | cogvlm2-llama3-chat-19B             | cogvlm2-llama3-chinese-chat-19B     |
-|------------------|-------------------------------------|-------------------------------------|
-| Base Model       | Meta-Llama-3-8B-Instruct            | Meta-Llama-3-8B-Instruct            |
-| Language         | English                             | Chinese, English                    |
-| Model size       | 19B                                 | 19B                                 |
-| Task             | Image understanding, dialogue model | Image understanding, dialogue model |
-| Model link       | [🤗 Huggingface]() [🤖ModelScope]() | [🤗 Huggingface]() [🤖ModelScope]() |
-| Int4 model       | Not yet launched    | Not yet launched                    |
-| Text length      | 8K                                  | 8K                                  |
-| Image resolution | 1344 * 1344                         | 1344 * 1344                         |
+| Model name       | cogvlm2-llama3-chat-19B             | cogvlm2-llama3-chinese-chat-19B                                                                 |
+|------------------|-------------------------------------|-------------------------------------------------------------------------------------------------|
+| Base Model       | Meta-Llama-3-8B-Instruct            | Meta-Llama-3-8B-Instruct                                                                        |
+| Language         | English                             | Chinese, English                                                                                |
+| Model size       | 19B                                 | 19B                                                                                             |
+| Task             | Image understanding, dialogue model | Image understanding, dialogue model                                                             |
+| Model link       | [🤗 Huggingface](https://huggingface.co/THUDM/cogvlm2-llama3-chat-19B) [🤖ModelScope](https://modelscope.cn/models/ZhipuAI/cogvlm2-llama3-chat-19B/) | [🤗 Huggingface](https://huggingface.co/THUDM/cogvlm2-llama3-chinese-chat-19B) [🤖ModelScope](https://modelscope.cn/models/ZhipuAI/cogvlm2-llama3-chinese-chat-19B/) |
+| Int4 model       | Not yet launched    | Not yet launched                                                                                |
+| Text length      | 8K                                  | 8K                                                                                              |
+| Image resolution | 1344 * 1344                         | 1344 * 1344                                                                                     |
 
 ## Benchmark
 
@@ -67,7 +65,7 @@ follows, you can click to enter the corresponding tutorial link:
 
 ## License
 
-This model is released under the CogVLM2 [LICENSE](LICENSE.md). For models built with Meta Llama 3, please also adhere to the [LLAMA3_LICENSE](LLAMA3_LICENSE.md).
+This model is released under the CogVLM2 [CogVLM2 LICENSE](MODEL_LICENSE). For models built with Meta Llama 3, please also adhere to the [LLAMA3_LICENSE](https://llama.meta.com/llama3/license/).
 
 ## Citation
 
