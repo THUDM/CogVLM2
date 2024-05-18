@@ -6,6 +6,8 @@
 
 Python: 3.10.12 or above
 
+OS: It is recommended to run on a Linux operating system to avoid installation issues with the `xformers` library.
+
 GPU requirements are as shown in the table below:
 
 | Model Name                                   | 19B Series Model | Remarks                      |
