@@ -7,10 +7,10 @@
 <img src=resources/logo.svg width="40%"/>
 </div>
 <p align="center">
-    👋 加入我们的 <a href="resources/WECHAT.md" target="_blank">微信</a>
+    👋 加入我们的 <a href="resources/WECHAT.md" target="_blank">微信</a> · 💡 立刻 <a href="https://modelscope.cn/studios/ZhipuAI/Cogvlm2-llama3-chinese-chat-Demo/summary" target="_blank">在线体验</a>
 </p>
 <p align="center">
-📍在 <a href="https://open.bigmodel.cn/dev/api#super-humanoid">开放平台</a> 体验更大规模的 CogVLM 模型。
+📍在 <a href="https://open.bigmodel.cn/dev/api#super-humanoid">开放平台</a> 体验更大规模的 CogVLM 模型 (GLM-4V)。
 </p>
 
 

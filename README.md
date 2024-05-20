@@ -3,14 +3,14 @@
 [中文版README](./README_zh.md)
 
 <div align="center">
-<img src=resources/logo.svg width="40%"/>
+<img src=resources/logo.svg width="40%"/> 
 </div>
 
 <p align="center">
-    👋 Join our <a href="resources/WECHAT.md" target="_blank">Wechat</a>
+    👋 Join our <a href="resources/WECHAT.md" target="_blank">Wechat</a> · 💡Try it in <a href="https://modelscope.cn/studios/ZhipuAI/Cogvlm2-llama3-chinese-chat-Demo/summary" target="_blank">ModelScope</a>
 </p>
 <p align="center">
-📍Experience the larger-scale CogVLM model on the <a href="https://open.bigmodel.cn/dev/api#super-humanoid">ZhipuAI Open Platform</a>.
+📍Experience the larger-scale CogVLM model (GLM-4V) on the <a href="https://open.bigmodel.cn/dev/api#super-humanoid">ZhipuAI Open Platform</a>.
 </p>
 
 We launch a new generation of **CogVLM2** series of models and open source two models based
