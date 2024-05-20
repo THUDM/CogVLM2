@@ -42,6 +42,7 @@
 
 | Model                          | Open Source | LLM Size | TextVQA  | DocVQA   | ChartQA  | OCRbench | MMMU     | MMVet    | MMBench  |
 |--------------------------------|-------------|----------|----------|----------|----------|----------|----------|----------|----------|
+| CogVLM1.1                      | ✅           | 7B       | 69.7     | -        | 68.3     | 590      | 37.3     | 52.0     | 65.8     |
 | LLaVA-1.5                      | ✅           | 13B      | 61.3     | -        | -        | 337      | 37.0     | 35.4     | 67.7     |
 | Mini-Gemini                    | ✅           | 34B      | 74.1     | -        | -        | -        | 48.0     | 59.3     | 80.6     |
 | LLaVA-NeXT-LLaMA3              | ✅           | 8B       | -        | 78.2     | 69.5     | -        | 41.7     | -        | 72.1     |
@@ -51,7 +52,6 @@
 | Claude3-Opus                   | ❌           | -        | -        | 89.3     | 80.8     | 694      | **59.4** | 51.7     | 63.3     |
 | Gemini Pro 1.5                 | ❌           | -        | 73.5     | 86.5     | 81.3     | -        | 58.5     | -        | -        |
 | GPT-4V                         | ❌           | -        | 78.0     | 88.4     | 78.5     | 656      | 56.8     | **67.7** | 75.0     |
-| CogVLM1.1 (Ours)               | ✅           | 7B       | 69.7     | -        | 68.3     | 590      | 37.3     | 52.0     | 65.8     |
 | CogVLM2-LLaMA3 (Ours)          | ✅           | 8B       | 84.2     | **92.3** | 81.0     | 756      | 44.3     | 60.4     | 80.5     |
 | CogVLM2-LLaMA3-Chinese  (Ours) | ✅           | 8B       | **85.0** | 88.4     | 74.7     | **780**  | 42.8     | 60.5     | 78.9     |
 
@@ -67,7 +67,8 @@
 
 ## 模型协议
 
-该模型根据 [CogVLM2 LICENSE](MODEL_LICENSE) 许可证发布。对于使用了Meta Llama 3基座模型构建的模型，需要同时遵守 [LLAMA3_LICENSE](https://llama.meta.com/llama3/license/) 许可证。
+该模型根据 [CogVLM2 LICENSE](MODEL_LICENSE) 许可证发布。对于使用了Meta Llama
+3基座模型构建的模型，需要同时遵守 [LLAMA3_LICENSE](https://llama.meta.com/llama3/license/) 许可证。
 
 ## 引用
 
