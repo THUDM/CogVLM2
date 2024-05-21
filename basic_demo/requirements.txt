@@ -11,3 +11,4 @@ timm>=0.9.16
 openai>=1.28.1
 loguru>=0.7.2
 pydantic>=2.7.1
+sse-starlette>=2.0.0,<2.2.0
