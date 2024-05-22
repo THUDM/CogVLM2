@@ -2,6 +2,7 @@
 This is a demo for using CogVLM2 in CLI using Single GPU.
 Strongly suggest to use GPU with bfloat16 support, otherwise, it will be slow.
 Mention that only one picture can be processed at one conversation, which means you can not replace or insert another picture during the conversation.
+
 """
 
 import torch
@@ -9,7 +10,7 @@ import torch
 from PIL import Image
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-MODEL_PATH = "THUDM/cogvlm2-llama3-chat-19B"
+MODEL_PATH = "/share/home/zyx/Models/cogvlm2-llama3-chat-19B"
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 TORCH_TYPE = torch.bfloat16 if torch.cuda.is_available() and torch.cuda.get_device_capability()[
     0] >= 8 else torch.float16
@@ -22,7 +23,11 @@ model = AutoModelForCausalLM.from_pretrained(
     MODEL_PATH,
     torch_dtype=TORCH_TYPE,
     trust_remote_code=True,
+    # load_in_4bit=True,
+    # low_cpu_mem_usage=True
 ).to(DEVICE).eval()
+
+
 
 text_only_template = "A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions. USER: {} ASSISTANT:"
 
