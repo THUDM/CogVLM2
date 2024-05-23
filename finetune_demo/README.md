@@ -12,7 +12,8 @@
 
 ## Minimum configuration
 
-- No less than 57GB of video memory per GPU
+- Each graphics card must have no less than 57GB of video memory (supports single-card fine-tuning)
+- Tensor parallelism is not supported yet, that is, the model is split into multiple graphics cards for fine-tuning.
 
 ## Start fine-tuning
 

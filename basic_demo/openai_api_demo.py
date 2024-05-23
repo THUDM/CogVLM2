@@ -1,4 +1,5 @@
 import gc
+import threading
 import time
 import base64
 
@@ -154,6 +155,7 @@ async def create_chat_completion(request: ChatCompletionRequest):
         max_tokens=request.max_tokens or 1024,
         echo=False,
         stream=request.stream,
+        repetition_penalty=request.repetition_penalty
     )
 
     if request.stream:
@@ -177,13 +179,7 @@ async def create_chat_completion(request: ChatCompletionRequest):
         setattr(usage, usage_key, getattr(usage, usage_key) + usage_value)
     return ChatCompletionResponse(model=request.model, choices=[choice_data], object="chat.completion", usage=usage)
 
-
-async def predict(model_id: str, params: dict):
-    """
-    Handle streaming predictions. It continuously generates responses for a given input stream.
-    This is particularly useful for real-time, continuous interactions with the model.
-    """
-
+def predict(model_id: str, params: dict):
     global model, tokenizer
 
     choice_data = ChatCompletionResponseStreamChoice(
@@ -199,20 +195,12 @@ async def predict(model_id: str, params: dict):
         decoded_unicode = new_response["text"]
         delta_text = decoded_unicode[len(previous_text):]
         previous_text = decoded_unicode
-        delta = DeltaMessage(
-            content=delta_text,
-            role="assistant",
-        )
-        choice_data = ChatCompletionResponseStreamChoice(
-            index=0,
-            delta=delta,
-        )
+        delta = DeltaMessage(content=delta_text, role="assistant")
+        choice_data = ChatCompletionResponseStreamChoice(index=0, delta=delta)
         chunk = ChatCompletionResponse(model=model_id, choices=[choice_data], object="chat.completion.chunk")
         yield "{}".format(chunk.model_dump_json(exclude_unset=True))
-    choice_data = ChatCompletionResponseStreamChoice(
-        index=0,
-        delta=DeltaMessage(),
-    )
+
+    choice_data = ChatCompletionResponseStreamChoice(index=0, delta=DeltaMessage())
     chunk = ChatCompletionResponse(model=model_id, choices=[choice_data], object="chat.completion.chunk")
     yield "{}".format(chunk.model_dump_json(exclude_unset=True))
 
@@ -287,10 +275,6 @@ def process_history_and_images(messages: List[ChatMessageInput]) -> Tuple[
 
 @torch.inference_mode()
 def generate_stream_cogvlm(model: AutoModelForCausalLM, tokenizer: AutoTokenizer, params: dict):
-    """
-    Generates a stream of responses using the CogVLM model in inference mode.
-    It's optimized to handle continuous input-output interactions with the model in a streaming manner.
-    """
     messages = params["messages"]
     temperature = float(params.get("temperature", 1.0))
     repetition_penalty = float(params.get("repetition_penalty", 1.0))
@@ -298,10 +282,7 @@ def generate_stream_cogvlm(model: AutoModelForCausalLM, tokenizer: AutoTokenizer
     max_new_tokens = int(params.get("max_tokens", 256))
     query, history, image_list = process_history_and_images(messages)
 
-    logger.debug(f"==== request ====\n{query}")
-
-    input_by_model = model.build_conversation_input_ids(tokenizer, query=query, history=history,
-                                                        images=[image_list[-1]])
+    input_by_model = model.build_conversation_input_ids(tokenizer, query=query, history=history, images=[image_list[-1]])
     inputs = {
         'input_ids': input_by_model['input_ids'].unsqueeze(0).to(DEVICE),
         'token_type_ids': input_by_model['token_type_ids'].unsqueeze(0).to(DEVICE),
@@ -328,21 +309,30 @@ def generate_stream_cogvlm(model: AutoModelForCausalLM, tokenizer: AutoTokenizer
     if temperature > 1e-5:
         gen_kwargs["temperature"] = temperature
 
-    total_len = 0
     generated_text = ""
-    with torch.no_grad():
-        model.generate(**inputs, **gen_kwargs)
-        for next_text in streamer:
-            generated_text += next_text
-            yield {
-                "text": generated_text,
-                "usage": {
-                    "prompt_tokens": input_echo_len,
-                    "completion_tokens": total_len - input_echo_len,
-                    "total_tokens": total_len,
-                },
-            }
-    ret = {
+
+    def generate_text():
+        with torch.no_grad():
+            model.generate(**inputs, **gen_kwargs)
+
+    generation_thread = threading.Thread(target=generate_text)
+    generation_thread.start()
+
+    total_len = input_echo_len
+    for next_text in streamer:
+        generated_text += next_text
+        total_len = len(tokenizer.encode(generated_text))
+        yield {
+            "text": generated_text,
+            "usage": {
+                "prompt_tokens": input_echo_len,
+                "completion_tokens": total_len - input_echo_len,
+                "total_tokens": total_len,
+            },
+        }
+    generation_thread.join()
+
+    yield {
         "text": generated_text,
         "usage": {
             "prompt_tokens": input_echo_len,
@@ -350,7 +340,6 @@ def generate_stream_cogvlm(model: AutoModelForCausalLM, tokenizer: AutoTokenizer
             "total_tokens": total_len,
         },
     }
-    yield ret
 
 
 gc.collect()

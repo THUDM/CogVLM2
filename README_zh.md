@@ -10,7 +10,7 @@
     👋 加入我们的 <a href="resources/WECHAT.md" target="_blank">微信</a> · 💡 立刻 <a href="http://36.103.203.44:7861/" target="_blank">在线体验</a>
 </p>
 <p align="center">
-📍在 <a href="https://open.bigmodel.cn/dev/api#super-humanoid">开放平台</a> 体验更大规模的 CogVLM 模型 (GLM-4V)。
+📍在 <a href="https://open.bigmodel.cn/dev/api#glm-4v">开放平台</a> 体验更大规模的 CogVLM 模型 (GLM-4V)。
 </p>
 
 

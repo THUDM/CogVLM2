@@ -10,7 +10,7 @@
     👋 Join our <a href="resources/WECHAT.md" target="_blank">Wechat</a> · 💡Try it <a href="http://36.103.203.44:7861/" target="_blank">Online</a>
 </p>
 <p align="center">
-📍Experience the larger-scale CogVLM model (GLM-4V) on the <a href="https://open.bigmodel.cn/dev/api#super-humanoid">ZhipuAI Open Platform</a>.
+📍Experience the larger-scale CogVLM model (GLM-4V) on the <a href="https://open.bigmodel.cn/dev/api#glm-4v">ZhipuAI Open Platform</a>.
 </p>
 
 We launch a new generation of **CogVLM2** series of models and open source two models based

@@ -6,7 +6,7 @@
 
 Python: 3.10.12 以上版本。
 
-操作系统: 建议使用 Linux 操作系统运行以避免`xformers`库安装问题。
+操作系统: 建议使用 Linux 操作系统运行以避免`xformers`库安装问题。建议使用 NVIDIA GPU 以防止兼容性问题。
 
 GPU要求如下表格所示
 
