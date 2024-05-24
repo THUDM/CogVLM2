@@ -13,6 +13,14 @@
 📍Experience the larger-scale CogVLM model (GLM-4V) on the <a href="https://open.bigmodel.cn/dev/api#glm-4v">ZhipuAI Open Platform</a>.
 </p>
 
+
+## Recent updates
+
+- 🔥🔥 **News**: ``2024/5/24```: We have released the Int4 version model, which requires only 16GB of video memory for inference. Welcome to experience it!
+- 🔥 **News**: ``2024/5/20``: We released the next generation model CogVLM2, which is based on llama3-8b and is equivalent (or better) to GPT-4V in most cases ! Welcome to download!
+
+## Model introduction
+
 We launch a new generation of **CogVLM2** series of models and open source two models based
 on [Meta-Llama-3-8B-Instruct](https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct). Compared with the previous
 generation of CogVLM open source models, the CogVLM2 series of open source models have the following improvements:
@@ -32,7 +40,7 @@ You can see the details of the **CogVLM2** family of open source models in the t
 | Task             | Image understanding, dialogue model                                                                                                                                                                                                   | Image understanding, dialogue model                                                                                                                                                                                                                           |
 | Model link       | [🤗 Huggingface](https://huggingface.co/THUDM/cogvlm2-llama3-chat-19B)  [🤖 ModelScope](https://modelscope.cn/models/ZhipuAI/cogvlm2-llama3-chat-19B/)  [💫 Wise Model](https://wisemodel.cn/models/ZhipuAI/cogvlm2-llama3-chat-19B/) | [🤗 Huggingface](https://huggingface.co/THUDM/cogvlm2-llama3-chinese-chat-19B) [🤖 ModelScope](https://modelscope.cn/models/ZhipuAI/cogvlm2-llama3-chinese-chat-19B/)  [ 💫 Wise Model](https://wisemodel.cn/models/ZhipuAI/cogvlm2-llama3-chinese-chat-19B/) |
 | Demo Page        | [📙 Official Demo](http://36.103.203.44:7861/)                                                                                                                                                                                        | [📙 Official Demo](http://36.103.203.44:7861/) [🤖 ModelScope](https://modelscope.cn/studios/ZhipuAI/Cogvlm2-llama3-chinese-chat-Demo/summary)                                                                                                                |
-| Int4 model       | Not yet launched                                                                                                                                                                                                                      | Not yet launched                                                                                                                                                                                                                                              |
+| Int4 model       | [🤗 Huggingface](https://huggingface.co/THUDM/cogvlm2-llama3-chat-19B-int4)  [🤖 ModelScope](https://modelscope.cn/models/ZhipuAI/cogvlm2-llama3-chat-19B-int4)                                                                       | [🤗 Huggingface](https://huggingface.co/THUDM/cogvlm2-llama3-chinese-chat-19B-int4) [🤖 ModelScope](https://modelscope.cn/models/ZhipuAI/cogvlm2-llama3-chinese-chat-19B-int4)                                                                                |
 | Text length      | 8K                                                                                                                                                                                                                                    | 8K                                                                                                                                                                                                                                                            |
 | Image resolution | 1344 * 1344                                                                                                                                                                                                                           | 1344 * 1344                                                                                                                                                                                                                                                   |
 
