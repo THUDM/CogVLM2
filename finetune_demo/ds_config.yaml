@@ -1,13 +1,30 @@
+train_micro_batch_size_per_gpu: 1
+gradient_accumulation_steps: 1
+steps_per_print: 50
+gradient_clipping: 1.0
+
 zero_optimization:
   stage: 2
-  contiguous_gradients: true
+  contiguous_gradients: false
   overlap_comm: true
-  allgather_partitions: true
   reduce_scatter: true
-  allgather_bucket_size: 500000000
-  reduce_bucket_size: 500000000
+  reduce_bucket_size: 1000000000
+  allgather_bucket_size: 100000000
+  load_from_fp32_weights: false
+  round_robin_gradients: false
 
-train_micro_batch_size_per_gpu: 1
+offload_optimizer:
+  device: cpu
+  pin_memory: true
+
+zero_allow_untested_optimizer: true
 
 bf16:
   enabled: true
+
+activation_checkpointing:
+  partition_activations: false
+  contiguous_memory_optimization: false
+  cpu_checkpointing: false
+
+wall_clock_breakdown: true

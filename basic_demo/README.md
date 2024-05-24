@@ -6,16 +6,16 @@
 
 Python: 3.10.12 or above
 
-OS: It is recommended to run on a Linux operating system with NVIDIA GPU to avoid installation issues with the `xformers` library.
+OS: It is recommended to run on a Linux operating system with NVIDIA GPU to avoid installation issues with
+the `xformers` library.
 
 GPU requirements are as shown in the table below:
 
-| Model Name                                   | 19B Series Model | Remarks                      |
-|----------------------------------------------|------------------|------------------------------|
-| BF16 / FP16 Inference                        | 42GB             | Tested with 2K dialogue text |
-| Int4 Inference                               | 16GB             | Tested with 2K dialogue text |
-| BF16 Lora Tuning (Freeze Vision Expert Part) | 57GB             | Training text length is 2K   |
-| BF16 Lora Tuning (With Vision Expert Part)   | \> 80GB          | Single GPU cannot tune       |
+| Model Name                                 | 19B Series Model                          | Remarks                       |
+|--------------------------------------------|-------------------------------------------|-------------------------------|
+| BF16 / FP16 Inference                      | 42GB                                      | Tested with 2K dialogue text  |
+| Int4 Inference                             | 16GB                                      | Tested with 2K dialogue text  |
+| BF16 Lora Tuning (With Vision Expert Part) | 73GB(8 GPUs with A100 x 80G using zero 2) | Trained with 2K dialogue text |
 
 Before running any code, make sure you have all dependencies installed. You can install all dependency packages with the
 following command:

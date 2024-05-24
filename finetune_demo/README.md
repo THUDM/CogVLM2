@@ -12,7 +12,7 @@
 
 ## Minimum configuration
 
-- Each graphics card must have no less than 57GB of video memory (supports single-card fine-tuning)
+- We Only test A100 GPUs with 80GB memory for finetune. It requires at least 73GB of GPU memory using 8 GPUs with zero2.
 - Tensor parallelism is not supported yet, that is, the model is split into multiple graphics cards for fine-tuning.
 
 ## Start fine-tuning
@@ -76,9 +76,10 @@ The figure below shows the memory usage during fine-tuning.
 
 Parameter information:
 
-+ `max_input_len`: 1024
-+ `max_output_len`: 1024
-+ `batch_size`: 2
++ `max_input_len`: 512
++ `max_output_len`: 512
++ `batch_size_per_gpus`: 1
++ `lora_target`: vision_expert_query_key_value
 
 GPU memory usage:
 
@@ -113,7 +114,7 @@ By running `peft_infer.py` you can use the fine-tuned model to generate text. Yo
 address according to the configuration requirements in the code. Then run:
 
 ```shell
-pythonpeft_infer.py
+python peft_infer.py
 ```
 
 You can use the fine-tuned model for inference.

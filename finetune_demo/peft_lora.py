@@ -191,13 +191,13 @@ def main():
     parser.add_argument("--local_rank", type=int, default=-1, help="Local rank for distributed training")
     parser.add_argument("--lora_rank", type=int, default=8, help="Rank parameter for LoRA")
     parser.add_argument("--lora_alpha", type=int, default=32, help="Alpha parameter for LoRA")
-    parser.add_argument("--lora_target", type=str, default=["lm_head"],
-                        help="Finetune Target for LoRA")
+    parser.add_argument("--lora_target", type=str, default=["vision_expert_query_key_value"],
+                        help="Finetune Target for LoRA") # you can change the target to other modules such as "language_expert_query_key_value"
     parser.add_argument("--lora_dropout", type=float, default=0.1, help="Dropout rate for LoRA")
     parser.add_argument("--warmup_steps", type=int, default=0,
                         help="Number of warmup steps for learning rate scheduler")
-    parser.add_argument("--max_input_len", type=int, default=1024, help="Maximum input length")
-    parser.add_argument("--max_output_len", type=int, default=1024, help="Maximum output length")
+    parser.add_argument("--max_input_len", type=int, default=512, help="Maximum input length")
+    parser.add_argument("--max_output_len", type=int, default=512, help="Maximum output length")
     parser.add_argument("--model_path", type=str,
                         default="THUDM/cogvlm2-llama3-chat-19B",
                         help="Path to the pretrained model")
@@ -242,6 +242,7 @@ def main():
         batch_size=args.batch_size,
         shuffle=True,
         collate_fn=dataset.custom_collate_fn,
+
     )
     eval_dataloader = DataLoader(
         val_dataset,
@@ -260,7 +261,6 @@ def main():
     )
 
     model = get_peft_model(model, peft_config)
-    model.print_trainable_parameters()
     optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr)
     lr_scheduler = get_linear_schedule_with_warmup(
         optimizer=optimizer,
@@ -278,8 +278,7 @@ def main():
     for epoch in range(args.num_epochs):
         with TorchTracemalloc() as tracemalloc:
             model.train()
-            total_loss = 0
-
+            total_loss = 0.0
             for step, batch in enumerate(tqdm(train_dataloader)):
                 outputs = model(
                     input_ids=batch['input_ids'],
@@ -294,6 +293,7 @@ def main():
                 optimizer.step()
                 lr_scheduler.step()
                 optimizer.zero_grad()
+
                 if (step + 1) % args.save_step == 0:
                     print(f"Epoch {epoch}, Step {step + 1}, Loss {loss.item()}")
                     checkpoint_path = os.path.join(args.save_path, f'checkpoint_epoch_{epoch}_step_{step + 1}')
@@ -303,58 +303,65 @@ def main():
                         save_embedding_layers=True,
                     )
 
-                writer.add_scalar('Train/Loss', loss.item(), epoch * len(train_dataloader) + step)
+                    writer.add_scalar('Train/Loss', loss.item(), epoch * len(train_dataloader) + step)
 
-        accelerator.print(f"GPU Memory before entering the train : {b2mb(tracemalloc.begin)}")
-        accelerator.print(f"GPU Memory consumed at the end of the train (end-begin): {tracemalloc.used}")
-        accelerator.print(f"GPU Peak Memory consumed during the train (max-begin): {tracemalloc.peaked}")
-        accelerator.print(
-            f"GPU Total Peak Memory consumed during the train (max): {tracemalloc.peaked + b2mb(tracemalloc.begin)}"
-        )
+            total_loss = accelerator.gather(total_loss)
+            avg_loss = total_loss.mean().item()
+            train_ppl = torch.exp(torch.tensor(avg_loss))
 
-        accelerator.print(f"CPU Memory before entering the train : {b2mb(tracemalloc.cpu_begin)}")
-        accelerator.print(f"CPU Memory consumed at the end of the train (end-begin): {tracemalloc.cpu_used}")
-        accelerator.print(f"CPU Peak Memory consumed during the train (max-begin): {tracemalloc.cpu_peaked}")
-        accelerator.print(
-            f"CPU Total Peak Memory consumed during the train (max): {tracemalloc.cpu_peaked + b2mb(tracemalloc.cpu_begin)}"
-        )
-        train_epoch_loss = total_loss / len(train_dataloader)
-        train_ppl = torch.exp(train_epoch_loss)
-        accelerator.print(f"{epoch=}: {train_ppl=} {train_epoch_loss=}")
+            writer.add_scalar('Train/Epoch_Loss', avg_loss, epoch)
+            writer.add_scalar('Train/Perplexity', train_ppl, epoch)
+            accelerator.print(f"Epoch {epoch}: Average Loss {avg_loss:.4f}, Perplexity {train_ppl:.4f}")
 
-        writer.add_scalar('Train/Perplexity', train_ppl, epoch)
-        writer.add_scalar('Train/Epoch_Loss', train_epoch_loss, epoch)
+            accelerator.print(f"GPU Memory before entering the train : {b2mb(tracemalloc.begin)}")
+            accelerator.print(f"GPU Memory consumed at the end of the train (end-begin): {tracemalloc.used}")
+            accelerator.print(f"GPU Peak Memory consumed during the train (max-begin): {tracemalloc.peaked}")
+            accelerator.print(
+                f"GPU Total Peak Memory consumed during the train (max): {tracemalloc.peaked + b2mb(tracemalloc.begin)}"
+            )
 
-        model.eval()
-        eval_preds = []
-        with TorchTracemalloc() as tracemalloc:
-            for _, batch in enumerate(tqdm(eval_dataloader)):
-                batch = {k: v for k, v in batch.items() if k != "labels"}
-                with torch.no_grad():
-                    outputs = accelerator.unwrap_model(model).generate(
-                        **batch, synced_gpus=is_ds_zero_3, max_new_tokens=args.max_output_len
-                    )
-                outputs = accelerator.pad_across_processes(outputs, dim=1, pad_index=tokenizer.pad_token_id)
-                preds = accelerator.gather_for_metrics(outputs)
-                preds = preds[:, args.max_input_len + args.max_output_len:].detach().cpu().numpy()
-                eval_preds.extend(tokenizer.batch_decode(preds, skip_special_tokens=True, padding_size="left"))
+            accelerator.print(f"CPU Memory before entering the train : {b2mb(tracemalloc.cpu_begin)}")
+            accelerator.print(f"CPU Memory consumed at the end of the train (end-begin): {tracemalloc.cpu_used}")
+            accelerator.print(f"CPU Peak Memory consumed during the train (max-begin): {tracemalloc.cpu_peaked}")
+            accelerator.print(
+                f"CPU Total Peak Memory consumed during the train (max): {tracemalloc.cpu_peaked + b2mb(tracemalloc.cpu_begin)}"
+            )
 
-        accelerator.print(f"GPU Memory before entering the eval : {b2mb(tracemalloc.begin)}")
-        accelerator.print(f"GPU Memory consumed at the end of the eval (end-begin): {tracemalloc.used}")
-        accelerator.print(f"GPU Peak Memory consumed during the eval (max-begin): {tracemalloc.peaked}")
-        accelerator.print(
-            f"GPU Total Peak Memory consumed during the eval (max): {tracemalloc.peaked + b2mb(tracemalloc.begin)}"
-        )
+            model.eval()
+            eval_preds = []
+            eval_loss = 0.0
+            with TorchTracemalloc() as tracemalloc:
+                for _, batch in enumerate(tqdm(eval_dataloader)):
+                    batch = {k: v for k, v in batch.items() if k != "labels"}
+                    with torch.no_grad():
+                        outputs = accelerator.unwrap_model(model).generate(
+                            **batch, synced_gpus=is_ds_zero_3, max_new_tokens=args.max_output_len
+                        )
+                        eval_loss += outputs.loss
+                    outputs = accelerator.pad_across_processes(outputs, dim=1, pad_index=tokenizer.pad_token_id)
+                    preds = accelerator.gather_for_metrics(outputs)
+                    preds = preds[:, args.max_input_len + args.max_output_len:].detach().cpu().numpy()
+                    eval_preds.extend(tokenizer.batch_decode(preds, skip_special_tokens=True, padding_size="left"))
 
-        accelerator.print(f"CPU Memory before entering the eval : {b2mb(tracemalloc.cpu_begin)}")
-        accelerator.print(f"CPU Memory consumed at the end of the eval (end-begin): {tracemalloc.cpu_used}")
-        accelerator.print(f"CPU Peak Memory consumed during the eval (max-begin): {tracemalloc.cpu_peaked}")
-        accelerator.print(
-            f"CPU Total Peak Memory consumed during the eval (max): {tracemalloc.cpu_peaked + b2mb(tracemalloc.cpu_begin)}"
-        )
+            eval_loss = accelerator.gather(eval_loss)
+            avg_eval_loss = eval_loss.mean().item()
 
-        writer.add_scalar('Eval/Perplexity', torch.exp(train_epoch_loss), epoch)
-        writer.add_scalar('Eval/Epoch_Loss', train_epoch_loss, epoch)
+            accelerator.print(f"GPU Memory before entering the eval : {b2mb(tracemalloc.begin)}")
+            accelerator.print(f"GPU Memory consumed at the end of the eval (end-begin): {tracemalloc.used}")
+            accelerator.print(f"GPU Peak Memory consumed during the eval (max-begin): {tracemalloc.peaked}")
+            accelerator.print(
+                f"GPU Total Peak Memory consumed during the eval (max): {tracemalloc.peaked + b2mb(tracemalloc.begin)}"
+            )
+
+            accelerator.print(f"CPU Memory before entering the eval : {b2mb(tracemalloc.cpu_begin)}")
+            accelerator.print(f"CPU Memory consumed at the end of the eval (end-begin): {tracemalloc.cpu_used}")
+            accelerator.print(f"CPU Peak Memory consumed during the eval (max-begin): {tracemalloc.cpu_peaked}")
+            accelerator.print(
+                f"CPU Total Peak Memory consumed during the eval (max): {tracemalloc.cpu_peaked + b2mb(tracemalloc.cpu_begin)}"
+            )
+
+            writer.add_scalar('Eval/Perplexity', torch.exp(torch.tensor(avg_eval_loss)), epoch)
+            writer.add_scalar('Eval/Epoch_Loss', avg_eval_loss, epoch)
 
     checkpoint_path = os.path.join(args.save_path, 'final_model')
     model.save_pretrained(

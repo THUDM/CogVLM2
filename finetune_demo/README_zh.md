@@ -14,7 +14,7 @@
 
 ## 最低配置
 
-- 每张显卡不少于 57GB 显存（支持单卡微调）
+- 我们仅在具有80GB内存的A100 GPU上进行了微调测试。使用零冗余优化策略2（zero2）时，至少需要73GB的GPU内存，并且需要8个GPU。
 - 暂不支持 Tensor 并行，即模型拆分到多张显卡微调。
 
 ## 开始微调
@@ -74,9 +74,10 @@ deepspeed peft_lora.py --ds_config ds_config.yaml
 
 参数信息：
 
-+ `max_input_len`: 1024
-+ `max_output_len`: 1024
-+ `batch_size`: 2
++ `max_input_len`: 512
++ `max_output_len`: 512
++ `batch_size_per_gpus`: 1
++ `lora_target`: vision_expert_query_key_value
 
 显存占用情况：
 
