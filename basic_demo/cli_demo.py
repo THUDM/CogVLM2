@@ -2,15 +2,14 @@
 This is a demo for using CogVLM2 in CLI using Single GPU.
 Strongly suggest to use GPU with bfloat16 support, otherwise, it will be slow.
 Mention that only one picture can be processed at one conversation, which means you can not replace or insert another picture during the conversation.
-
+for multi-GPU, please use cli_demo_multi_gpus.py
 """
 
 import torch
-
 from PIL import Image
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-MODEL_PATH = "/share/home/zyx/Models/cogvlm2-llama3-chat-19B"
+MODEL_PATH = "THUDM/cogvlm2-llama3-chat-19B"
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 TORCH_TYPE = torch.bfloat16 if torch.cuda.is_available() and torch.cuda.get_device_capability()[
     0] >= 8 else torch.float16
@@ -27,7 +26,9 @@ model = AutoModelForCausalLM.from_pretrained(
     # low_cpu_mem_usage=True
 ).to(DEVICE).eval()
 
-
+if torch.cuda.device_count() > 1:
+    print("Model is loaded on multiple GPUs. Please use cli_demo_multi_gpus.py.")
+    exit()
 
 text_only_template = "A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions. USER: {} ASSISTANT:"
 
@@ -77,10 +78,9 @@ while True:
             'attention_mask': input_by_model['attention_mask'].unsqueeze(0).to(DEVICE),
             'images': [[input_by_model['images'][0].to(DEVICE).to(TORCH_TYPE)]] if image is not None else None,
         }
-        # add any transformers params here.
         gen_kwargs = {
             "max_new_tokens": 2048,
-            "pad_token_id": 128002,  # avoid warning of llama3
+            "pad_token_id": 128002,
         }
         with torch.no_grad():
             outputs = model.generate(**inputs, **gen_kwargs)

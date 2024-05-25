@@ -3,6 +3,18 @@ This is a demo for using CogVLM2 in CLI using multi-GPU with lower memory.
 If your single GPU is not enough to drive this model, you can use this demo to run this model on multiple graphics cards with limited video memory.
 Here, we default that your graphics card has 24GB of video memory, which is not enough to load the FP16 / BF16 model.
 so , need to use two graphics cards to load. We set '23GiB' for each GPU to avoid out of memory.
+GPUs less than 2 is recommended and need more than 16GB of video memory.
+
+test success in 3 GPUs with 16GB video memory.
++---------------------------------------------------------------------------------------+
+| Processes:                                                                            |
+|  GPU   GI   CI        PID   Type   Process name                            GPU Memory |
+|        ID   ID                                                             Usage      |
+|=======================================================================================|
+|    1   N/A  N/A   1890574      C   python                                    13066MiB |
+|    2   N/A  N/A   1890574      C   python                                    14560MiB |
+|    3   N/A  N/A   1890574      C   python                                    11164MiB |
++---------------------------------------------------------------------------------------+
 """
 import torch
 from PIL import Image
@@ -24,13 +36,16 @@ with init_empty_weights():
         MODEL_PATH,
         torch_dtype=TORCH_TYPE,
         trust_remote_code=True,
-        low_cpu_mem_usage=True
     )
+
+num_gpus = torch.cuda.device_count()
+max_memory_per_gpu = "16GiB"
+if num_gpus > 2:
+    max_memory_per_gpu = f"{round(42 / num_gpus)}GiB"
 
 device_map = infer_auto_device_map(
     model=model,
-    max_memory={i: "23GiB" for i in range(torch.cuda.device_count())},
-    # set 23GiB for each GPU, depends on your GPU memory, you can adjust this value
+    max_memory={i: max_memory_per_gpu for i in range(num_gpus)},
     no_split_module_classes=["CogVLMDecoderLayer"]
 )
 model = load_checkpoint_and_dispatch(model, MODEL_PATH, device_map=device_map, dtype=TORCH_TYPE)
@@ -92,6 +107,6 @@ while True:
             outputs = model.generate(**inputs, **gen_kwargs)
             outputs = outputs[:, inputs['input_ids'].shape[1]:]
             response = tokenizer.decode(outputs[0])
-            response = response.split("<|end_of_text|>")[0]
+            response = response.split("")[0]
             print("\nCogVLM2:", response)
         history.append((query, response))
