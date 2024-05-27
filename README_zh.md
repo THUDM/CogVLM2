@@ -69,9 +69,17 @@
 
 本开源仓库将带领开发者快速上手 **CogVLM2** 开源模型的基础调用方式、微调示例、OpenAI API格式调用示例等。具体项目结构如下，您可以点击进入对应的教程链接：
 
-+ [basic_demo](basic_demo/README.md) - 基础调用方式,包含了 CLI, WebUI 和 OpenAI API 等模型推理调用方式，以及模型调用的最低配置要求。如果您是第一次使用
-  CogVLM2 开源模型，建议您从这里开始。
-+ [finetune_demo](finetune_demo/README.md) - 微调示例，包含了微调语言模型的示例。
+## [basic_demo](basic_demo/README.md) 文件夹包括：
+  + **CLI** 演示。
+  + **CLI** 演示，使用多个GPU。
+  + **Web** 演示，由 chainlit 提供。
+  + **API** 服务器，采用 OpenAI 格式。
+  + **Int4** 可以通过 `--quant 4` 轻松启用，内存使用为16GB。
+
+## [finetune_demo](finetune_demo/README.md) 文件夹包括：
+  + [**peft**](https://github.com/huggingface/peft) 框架的高效微调示例。
+  + [TODO] 使用 [**sat**](http://github.com/THUDM/SwissArmyTransformer) 框架的可靠微调示例。
+  + [TODO] 将 `sat` 格式的检查点转换为 `huggingface` 格式的转换脚本。
 
 ## 模型协议
 

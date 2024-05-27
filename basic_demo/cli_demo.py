@@ -4,31 +4,56 @@ Strongly suggest to use GPU with bfloat16 support, otherwise, it will be slow.
 Mention that only one picture can be processed at one conversation, which means you can not replace or insert another picture during the conversation.
 for multi-GPU, please use cli_demo_multi_gpus.py
 """
-
 import torch
+import argparse
 from PIL import Image
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 MODEL_PATH = "THUDM/cogvlm2-llama3-chat-19B"
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
-TORCH_TYPE = torch.bfloat16 if torch.cuda.is_available() and torch.cuda.get_device_capability()[
-    0] >= 8 else torch.float16
+TORCH_TYPE = torch.bfloat16 if torch.cuda.is_available() and torch.cuda.get_device_capability()[0] >= 8 else torch.float16
+
+# Argument parser
+parser = argparse.ArgumentParser(description="CogVLM2 CLI Demo")
+parser.add_argument('--quant', type=int, choices=[4, 8], help='Enable 4-bit or 8-bit precision loading', default=0)
+args = parser.parse_args()
+
+if 'int4' in MODEL_PATH:
+    args.quant = 4
 
 tokenizer = AutoTokenizer.from_pretrained(
     MODEL_PATH,
     trust_remote_code=True
 )
-model = AutoModelForCausalLM.from_pretrained(
-    MODEL_PATH,
-    torch_dtype=TORCH_TYPE,
-    trust_remote_code=True,
-    # load_in_4bit=True,
-    # low_cpu_mem_usage=True
-).to(DEVICE).eval()
 
-if torch.cuda.device_count() > 1:
-    print("Model is loaded on multiple GPUs. Please use cli_demo_multi_gpus.py.")
+# Check GPU memory
+if torch.cuda.is_available() and torch.cuda.get_device_properties(0).total_memory < 48 * 1024 ** 3 and not args.quant:
+    print("GPU memory is less than 48GB. Please use cli_demo_multi_gpus.py or pass `--quant 4` or `--quant 8`.")
     exit()
+
+# Load the model
+if args.quant == 4:
+    model = AutoModelForCausalLM.from_pretrained(
+        MODEL_PATH,
+        torch_dtype=TORCH_TYPE,
+        trust_remote_code=True,
+        load_in_4bit=True,
+        low_cpu_mem_usage=True
+    ).eval()
+elif args.quant == 8:
+    model = AutoModelForCausalLM.from_pretrained(
+        MODEL_PATH,
+        torch_dtype=TORCH_TYPE,
+        trust_remote_code=True,
+        load_in_8bit=True,  # Assuming transformers support this argument; check documentation if not
+        low_cpu_mem_usage=True
+    ).eval()
+else:
+    model = AutoModelForCausalLM.from_pretrained(
+        MODEL_PATH,
+        torch_dtype=TORCH_TYPE,
+        trust_remote_code=True
+    ).eval().to(DEVICE)
 
 text_only_template = "A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions. USER: {} ASSISTANT:"
 

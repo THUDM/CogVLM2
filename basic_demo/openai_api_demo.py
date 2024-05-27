@@ -18,6 +18,8 @@ from io import BytesIO
 
 MODEL_PATH = 'THUDM/cogvlm2-llama3-chat-19B'
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
+TORCH_TYPE = torch.bfloat16 if torch.cuda.is_available() and torch.cuda.get_device_capability()[
+        0] >= 8 else torch.float16
 
 
 @asynccontextmanager
@@ -287,10 +289,10 @@ def generate_stream_cogvlm(model: AutoModelForCausalLM, tokenizer: AutoTokenizer
         'input_ids': input_by_model['input_ids'].unsqueeze(0).to(DEVICE),
         'token_type_ids': input_by_model['token_type_ids'].unsqueeze(0).to(DEVICE),
         'attention_mask': input_by_model['attention_mask'].unsqueeze(0).to(DEVICE),
-        'images': [[input_by_model['images'][0].to(DEVICE).to(torch_type)]],
+        'images': [[input_by_model['images'][0].to(DEVICE).to(TORCH_TYPE)]],
     }
     if 'cross_images' in input_by_model and input_by_model['cross_images']:
-        inputs['cross_images'] = [[input_by_model['cross_images'][0].to(DEVICE).to(torch_type)]]
+        inputs['cross_images'] = [[input_by_model['cross_images'][0].to(DEVICE).to(TORCH_TYPE)]]
 
     input_echo_len = len(inputs["input_ids"][0])
     streamer = TextIteratorStreamer(
@@ -346,16 +348,39 @@ gc.collect()
 torch.cuda.empty_cache()
 
 if __name__ == "__main__":
+    # Argument parser
+    import argparse
+    parser = argparse.ArgumentParser(description="CogVLM2 Web Demo")
+    parser.add_argument('--quant', type=int, choices=[4, 8], help='Enable 4-bit or 8-bit precision loading', default=0)
+    args = parser.parse_args()
+
+    if 'int4' in MODEL_PATH:
+        args.quant = 4
+
     tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH, trust_remote_code=True)
 
-    if torch.cuda.is_available() and torch.cuda.get_device_capability()[0] >= 8:
-        torch_type = torch.bfloat16
+    # Load the model
+    if args.quant == 4:
+        model = AutoModelForCausalLM.from_pretrained(
+            MODEL_PATH,
+            torch_dtype=TORCH_TYPE,
+            trust_remote_code=True,
+            load_in_4bit=True,
+            low_cpu_mem_usage=True
+        ).eval()
+    elif args.quant == 8:
+        model = AutoModelForCausalLM.from_pretrained(
+            MODEL_PATH,
+            torch_dtype=TORCH_TYPE,
+            trust_remote_code=True,
+            load_in_8bit=True,  # Assuming transformers support this argument; check documentation if not
+            low_cpu_mem_usage=True
+        ).eval()
     else:
-        torch_type = torch.float16
+        model = AutoModelForCausalLM.from_pretrained(
+            MODEL_PATH,
+            torch_dtype=TORCH_TYPE,
+            trust_remote_code=True
+        ).eval().to(DEVICE)
 
-    model = AutoModelForCausalLM.from_pretrained(
-        MODEL_PATH,
-        trust_remote_code=True,
-        torch_dtype=torch_type,
-    ).to(DEVICE).eval()
     uvicorn.run(app, host='0.0.0.0', port=8000, workers=1)

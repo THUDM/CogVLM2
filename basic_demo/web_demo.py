@@ -1,7 +1,7 @@
 """
 This is a simple chat demo using CogVLM2 model in ChainLit.
 """
-
+import os
 import dataclasses
 from typing import List
 from PIL import Image
@@ -12,14 +12,40 @@ from huggingface_hub.inference._generated.types import TextGenerationStreamOutpu
 import threading
 import torch
 
-MODEL_PATH = "THUDM/cogvlm2-llama3-chat-19B"
+MODEL_PATH = 'THUDM/cogvlm2-llama3-chat-19B'
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 TORCH_TYPE = torch.bfloat16 if torch.cuda.is_available() and torch.cuda.get_device_capability()[
     0] >= 8 else torch.float16
 tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH, trust_remote_code=True)
-model = AutoModelForCausalLM.from_pretrained(MODEL_PATH, torch_dtype=TORCH_TYPE, trust_remote_code=True).to(
-    DEVICE).eval()
 
+quant = int(os.environ.get('QUANT', 0))
+if 'int4' in MODEL_PATH:
+    quant = 4
+print(f'Quant = {quant}')
+
+# Load the model
+if quant == 4:
+    model = AutoModelForCausalLM.from_pretrained(
+        MODEL_PATH,
+        torch_dtype=TORCH_TYPE,
+        trust_remote_code=True,
+        load_in_4bit=True,
+        low_cpu_mem_usage=True
+    ).eval()
+elif quant == 8:
+    model = AutoModelForCausalLM.from_pretrained(
+        MODEL_PATH,
+        torch_dtype=TORCH_TYPE,
+        trust_remote_code=True,
+        load_in_8bit=True,  # Assuming transformers support this argument; check documentation if not
+        low_cpu_mem_usage=True
+    ).eval()
+else:
+    model = AutoModelForCausalLM.from_pretrained(
+        MODEL_PATH,
+        torch_dtype=TORCH_TYPE,
+        trust_remote_code=True
+    ).eval().to(DEVICE)
 
 @cl.on_chat_start
 def on_chat_start():
