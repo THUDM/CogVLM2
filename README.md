@@ -72,9 +72,17 @@ This open source repos will help developers to quickly get started with the basi
 source model, fine-tuning examples, OpenAI API format calling examples, etc. The specific project structure is as
 follows, you can click to enter the corresponding tutorial link:
 
-+ [basic_demo](basic_demo/README.md) - Basic calling methods include model inference calling methods such as CLI,
-  WebUI and OpenAI API. If you are using the CogVLM2 open source model for the first time, we recommend you start here.
-+ [finetune_demo](finetune_demo/README.md) - Fine-tuning examples, including examples of fine-tuning language models.
++ [basic_demo](basic_demo/README.md) folder includes:
+  + **CLI** demo.
+  + **CLI** demo with *multiple GPUs* .
+  + **Web** demo by *chainlit*.
+  + **API** server with *OpenAI format*.
+  + **Int4** is enabled easily with `--quant 4` with 16GB memory usage.
+  
++ [finetune_demo](finetune_demo/README.md) folder includes.
+  + [**peft**](https://github.com/huggingface/peft) framework examples for efficient finetuning.
+  + [TODO] [**sat**](http://github.com/THUDM/SwissArmyTransformer) framework examples for reliable finetuning.
+  + [TODO] transformation scripts to convert checkpoints from `sat` to `huggingface` format.
 
 ## License
 
