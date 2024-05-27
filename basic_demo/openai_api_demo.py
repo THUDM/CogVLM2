@@ -351,8 +351,11 @@ if __name__ == "__main__":
     # Argument parser
     import argparse
     parser = argparse.ArgumentParser(description="CogVLM2 Web Demo")
-    parser.add_argument('--quant', type=int, choices=[4, 8], help='Enable 4-bit or 8-bit precision loading')
+    parser.add_argument('--quant', type=int, choices=[4, 8], help='Enable 4-bit or 8-bit precision loading', default=0)
     args = parser.parse_args()
+
+    if 'int4' in MODEL_PATH:
+        args.quant = 4
 
     tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH, trust_remote_code=True)
 

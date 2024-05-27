@@ -12,14 +12,16 @@ from huggingface_hub.inference._generated.types import TextGenerationStreamOutpu
 import threading
 import torch
 
-quant = int(os.environ.get('QUANT', 0))
-print(f'Quant = {quant}')
-
 MODEL_PATH = 'THUDM/cogvlm2-llama3-chat-19B'
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 TORCH_TYPE = torch.bfloat16 if torch.cuda.is_available() and torch.cuda.get_device_capability()[
     0] >= 8 else torch.float16
 tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH, trust_remote_code=True)
+
+quant = int(os.environ.get('QUANT', 0))
+if 'int4' in MODEL_PATH:
+    quant = 4
+print(f'Quant = {quant}')
 
 # Load the model
 if quant == 4:

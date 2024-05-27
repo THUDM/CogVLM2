@@ -15,9 +15,11 @@ TORCH_TYPE = torch.bfloat16 if torch.cuda.is_available() and torch.cuda.get_devi
 
 # Argument parser
 parser = argparse.ArgumentParser(description="CogVLM2 CLI Demo")
-parser.add_argument('--quant', type=int, choices=[4, 8], help='Enable 4-bit or 8-bit precision loading')
-
+parser.add_argument('--quant', type=int, choices=[4, 8], help='Enable 4-bit or 8-bit precision loading', default=0)
 args = parser.parse_args()
+
+if 'int4' in MODEL_PATH:
+    args.quant = 4
 
 tokenizer = AutoTokenizer.from_pretrained(
     MODEL_PATH,
