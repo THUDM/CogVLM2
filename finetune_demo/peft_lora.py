@@ -314,28 +314,50 @@ def main():
         eval_loss = 0.0
         with TorchTracemalloc() as tracemalloc:
             for _, batch in enumerate(tqdm(eval_dataloader)):
-                batch = {k: v for k, v in batch.items() if k != "labels"}
+                labels = batch['labels']
                 with torch.no_grad():
-                    outputs = accelerator.unwrap_model(model).generate(
-                        **batch, synced_gpus=is_ds_zero_3, max_new_tokens=args.max_output_len
+                    # Forward pass to calculate logits and loss
+                    outputs = accelerator.unwrap_model(model)(
+                        input_ids=batch['input_ids'],
+                        token_type_ids=batch['token_type_ids'],
+                        attention_mask=batch['attention_mask'],
+                        images=batch['images'],
+                        labels=labels
                     )
-                    eval_loss += outputs.loss
-                outputs = accelerator.pad_across_processes(outputs, dim=1, pad_index=tokenizer.pad_token_id)
+                    loss = outputs.loss
+                    eval_loss += loss.detach().float()
+
+                    # Generate predictions
+                    generated_outputs = accelerator.unwrap_model(model).generate(
+                        input_ids=batch['input_ids'],
+                        token_type_ids=batch['token_type_ids'],
+                        attention_mask=batch['attention_mask'],
+                        images=batch['images'],
+                        max_new_tokens=args.max_output_len,
+                        synced_gpus=is_ds_zero_3
+                    )
+
+                # Pad across processes
+                outputs = accelerator.pad_across_processes(generated_outputs, dim=1, pad_index=tokenizer.pad_token_id)
+
+                # Gather for metrics
                 preds = accelerator.gather_for_metrics(outputs)
+
+                # Decode predictions
                 preds = preds[:, args.max_input_len + args.max_output_len:].detach().cpu().numpy()
-                eval_preds.extend(tokenizer.batch_decode(preds, skip_special_tokens=True, padding_size="left"))
+                eval_preds.extend(tokenizer.batch_decode(preds, skip_special_tokens=True, padding_side="left"))
+
         eval_loss = accelerator.gather(eval_loss)
         avg_eval_loss = eval_loss.mean().item()
         writer.add_scalar('Eval/Perplexity', torch.exp(torch.tensor(avg_eval_loss)), epoch)
         writer.add_scalar('Eval/Epoch_Loss', avg_eval_loss, epoch)
-    checkpoint_path = os.path.join(args.save_path, 'final_model')
-    model.save_pretrained(
-        save_directory=checkpoint_path,
-        safe_serialization=True,
-        save_embedding_layers=True
-    )
-    accelerator.wait_for_everyone()
-    writer.close()
+
+        checkpoint_path = os.path.join(args.save_path, 'final_model')
+        model.save_pretrained(
+            save_directory=checkpoint_path,
+            safe_serialization=True,
+            save_embedding_layers=True
+        )
 
 
 if __name__ == "__main__":
