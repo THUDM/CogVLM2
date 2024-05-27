@@ -16,7 +16,7 @@
 
 ## Recent updates
 
-- 🔥🔥 **News**: ``2024/5/24``: We have released the [Int4 version model](https://huggingface.co/THUDM/cogvlm2-llama3-chat-19B-int4), which requires only 16GB of video memory for inference. Welcome to experience it!
+- 🔥🔥 **News**: ``2024/5/24``: We have released the [Int4 version model](https://huggingface.co/THUDM/cogvlm2-llama3-chat-19B-int4), which requires only 16GB of video memory for inference. You can also run on-the-fly int4 version by passing `--quant 4`.
 - 🔥 **News**: ``2024/5/20``: We released the next generation model CogVLM2, which is based on llama3-8b and is equivalent (or better) to GPT-4V in most cases ! Welcome to download!
 
 ## Model introduction
