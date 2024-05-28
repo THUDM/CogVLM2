@@ -7,11 +7,12 @@ for multi-GPU, please use cli_demo_multi_gpus.py
 import torch
 import argparse
 from PIL import Image
-from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 
 MODEL_PATH = "THUDM/cogvlm2-llama3-chat-19B"
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
-TORCH_TYPE = torch.bfloat16 if torch.cuda.is_available() and torch.cuda.get_device_capability()[0] >= 8 else torch.float16
+TORCH_TYPE = torch.bfloat16 if torch.cuda.is_available() and torch.cuda.get_device_capability()[
+    0] >= 8 else torch.float16
 
 # Argument parser
 parser = argparse.ArgumentParser(description="CogVLM2 CLI Demo")
@@ -37,7 +38,7 @@ if args.quant == 4:
         MODEL_PATH,
         torch_dtype=TORCH_TYPE,
         trust_remote_code=True,
-        load_in_4bit=True,
+        quantization_config=BitsAndBytesConfig(load_in_4bit=True),
         low_cpu_mem_usage=True
     ).eval()
 elif args.quant == 8:
@@ -45,7 +46,7 @@ elif args.quant == 8:
         MODEL_PATH,
         torch_dtype=TORCH_TYPE,
         trust_remote_code=True,
-        load_in_8bit=True,  # Assuming transformers support this argument; check documentation if not
+        quantization_config=BitsAndBytesConfig(load_in_8bit=True),
         low_cpu_mem_usage=True
     ).eval()
 else:
@@ -54,8 +55,6 @@ else:
         torch_dtype=TORCH_TYPE,
         trust_remote_code=True
     ).eval().to(DEVICE)
-
-text_only_template = "A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions. USER: {} ASSISTANT:"
 
 while True:
     image_path = input("image path >>>>> ")
@@ -73,15 +72,6 @@ while True:
         if query == "clear":
             break
 
-        if image is None:
-            if text_only_first_query:
-                query = text_only_template.format(query)
-                text_only_first_query = False
-            else:
-                old_prompt = ''
-                for _, (old_query, response) in enumerate(history):
-                    old_prompt += old_query + " " + response + "\n"
-                query = old_prompt + "USER: {} ASSISTANT:".format(query)
         if image is None:
             input_by_model = model.build_conversation_input_ids(
                 tokenizer,
@@ -110,7 +100,6 @@ while True:
         with torch.no_grad():
             outputs = model.generate(**inputs, **gen_kwargs)
             outputs = outputs[:, inputs['input_ids'].shape[1]:]
-            response = tokenizer.decode(outputs[0])
-            response = response.split("<|end_of_text|>")[0]
+            response = tokenizer.decode(outputs[0], skip_special_tokens=True)
             print("\nCogVLM2:", response)
         history.append((query, response))

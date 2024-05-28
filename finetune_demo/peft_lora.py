@@ -49,7 +49,7 @@ class ConversationDataset(Dataset):
         self.output_length = output_length
         self.device = device
         self.torch_type = torch_type
-        self.padding_len = 2306
+        self.padding_len = 2303
         self.max_length = self.input_length + self.output_length + self.padding_len
 
     def __len__(self):
@@ -93,11 +93,12 @@ class ConversationDataset(Dataset):
         )
 
         def pad_to_len(unpadded_tensor, pad_to_length, pad_value=0):
-            if len(unpadded_tensor) >= pad_to_length:
+            current_length = len(unpadded_tensor)
+            if current_length >= pad_to_length:
                 return unpadded_tensor[:pad_to_length]
             return torch.cat(
                 (unpadded_tensor,
-                 torch.full([pad_to_length - len(unpadded_tensor)],
+                 torch.full([pad_to_length - current_length],
                             fill_value=pad_value,
                             dtype=unpadded_tensor.dtype,
                             device=unpadded_tensor.device)), dim=0)
@@ -192,12 +193,12 @@ def main():
     parser.add_argument("--lora_rank", type=int, default=8, help="Rank parameter for LoRA")
     parser.add_argument("--lora_alpha", type=int, default=32, help="Alpha parameter for LoRA")
     parser.add_argument("--lora_target", type=str, default=["vision_expert_query_key_value"],
-                        help="Finetune Target for LoRA") # you can change the target to other modules such as "language_expert_query_key_value"
+                        help="Finetune Target for LoRA")  # you can change the target to other modules such as "language_expert_query_key_value"
     parser.add_argument("--lora_dropout", type=float, default=0.1, help="Dropout rate for LoRA")
     parser.add_argument("--warmup_steps", type=int, default=0,
                         help="Number of warmup steps for learning rate scheduler")
-    parser.add_argument("--max_input_len", type=int, default=512, help="Maximum input length")
-    parser.add_argument("--max_output_len", type=int, default=512, help="Maximum output length")
+    parser.add_argument("--max_input_len", type=int, default=128, help="Maximum input length")
+    parser.add_argument("--max_output_len", type=int, default=128, help="Maximum output length")
     parser.add_argument("--model_path", type=str,
                         default="THUDM/cogvlm2-llama3-chat-19B",
                         help="Path to the pretrained model")
@@ -257,7 +258,6 @@ def main():
         target_modules=args.lora_target,
         lora_alpha=args.lora_alpha,
         lora_dropout=args.lora_dropout,
-        bias="none",
     )
 
     model = get_peft_model(model, peft_config)
@@ -270,14 +270,11 @@ def main():
     model, train_dataloader, eval_dataloader, optimizer, lr_scheduler = accelerator.prepare(
         model, train_dataloader, eval_dataloader, optimizer, lr_scheduler
     )
-
     logger.info("Preparation done. Starting training...")
-
-    writer = SummaryWriter(log_dir=args.save_path)  # TensorBoard writer
-
+    writer = SummaryWriter(log_dir=args.save_path)
     for epoch in range(args.num_epochs):
         model.train()
-        total_loss = 0.0  # Initialize total_loss at the start of each epoch
+        total_loss = 0.0
         for step, batch in enumerate(tqdm(train_dataloader)):
             outputs = model(
                 input_ids=batch['input_ids'],
@@ -297,8 +294,7 @@ def main():
                 checkpoint_path = os.path.join(args.save_path, f'checkpoint_epoch_{epoch}_step_{step + 1}')
                 model.save_pretrained(
                     save_directory=checkpoint_path,
-                    safe_serialization=True,
-                    save_embedding_layers=True,
+                    safe_serialization=True
                 )
                 writer.add_scalar('Train/Loss', loss.item(), epoch * len(train_dataloader) + step)
 
@@ -310,42 +306,29 @@ def main():
         accelerator.print(f"Epoch {epoch}: Average Loss {avg_loss:.4f}, Perplexity {train_ppl:.4f}")
 
         model.eval()
-        eval_preds = []
         eval_loss = 0.0
-        with TorchTracemalloc() as tracemalloc:
-            for _, batch in enumerate(tqdm(eval_dataloader)):
-                labels = batch['labels']
-                with torch.no_grad():
-                    # Forward pass to calculate logits and loss
-                    outputs = accelerator.unwrap_model(model)(
-                        input_ids=batch['input_ids'],
-                        token_type_ids=batch['token_type_ids'],
-                        attention_mask=batch['attention_mask'],
-                        images=batch['images'],
-                        labels=labels
-                    )
-                    loss = outputs.loss
-                    eval_loss += loss.detach().float()
 
-                    # Generate predictions
-                    generated_outputs = accelerator.unwrap_model(model).generate(
-                        input_ids=batch['input_ids'],
-                        token_type_ids=batch['token_type_ids'],
-                        attention_mask=batch['attention_mask'],
-                        images=batch['images'],
-                        max_new_tokens=args.max_output_len,
-                        synced_gpus=is_ds_zero_3
-                    )
+        for _, batch in enumerate(tqdm(eval_dataloader)):
+            inputs = {
+                'input_ids': batch['input_ids'],
+                'token_type_ids': batch['token_type_ids'],
+                'attention_mask': batch['attention_mask'],
+                'images': batch['images']
+            }
+            labels = batch['labels'].to(accelerator.device)
 
-                # Pad across processes
-                outputs = accelerator.pad_across_processes(generated_outputs, dim=1, pad_index=tokenizer.pad_token_id)
+            with torch.no_grad():
+                outputs = accelerator.unwrap_model(model)(
+                    input_ids=inputs['input_ids'],
+                    token_type_ids=inputs['token_type_ids'],
+                    attention_mask=inputs['attention_mask'],
+                    images=inputs['images'],
+                    labels=labels,
+                    is_ds_zero_3=is_ds_zero_3
+                )
 
-                # Gather for metrics
-                preds = accelerator.gather_for_metrics(outputs)
-
-                # Decode predictions
-                preds = preds[:, args.max_input_len + args.max_output_len:].detach().cpu().numpy()
-                eval_preds.extend(tokenizer.batch_decode(preds, skip_special_tokens=True, padding_side="left"))
+                loss = outputs.loss
+                eval_loss += loss.detach().float()
 
         eval_loss = accelerator.gather(eval_loss)
         avg_eval_loss = eval_loss.mean().item()
@@ -355,8 +338,7 @@ def main():
         checkpoint_path = os.path.join(args.save_path, 'final_model')
         model.save_pretrained(
             save_directory=checkpoint_path,
-            safe_serialization=True,
-            save_embedding_layers=True
+            safe_serialization=True
         )
 
 
