@@ -84,6 +84,11 @@ follows, you can click to enter the corresponding tutorial link:
   + [TODO] [**sat**](http://github.com/THUDM/SwissArmyTransformer) framework examples for reliable finetuning.
   + [TODO] transformation scripts to convert checkpoints from `sat` to `huggingface` format.
 
+## Useful Links
+
+In addition to the official inference code, you can also refer to the following community-provided inference solutions:
+ + [**xinference**](https://github.com/xorbitsai/inference/pull/1551)
+
 ## License
 
 This model is released under the CogVLM2 [CogVLM2 LICENSE](MODEL_LICENSE). For models built with Meta Llama 3, please

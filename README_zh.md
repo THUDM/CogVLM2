@@ -81,6 +81,11 @@
   + [TODO] 使用 [**sat**](http://github.com/THUDM/SwissArmyTransformer) 框架的可靠微调示例。
   + [TODO] 将 `sat` 格式的检查点转换为 `huggingface` 格式的转换脚本。
 
+## 友情链接
+
+除了官方提供的推理代码，还有以下由社区提供的推理方案可以参考。包括: 
+ + [**xinference**](https://github.com/xorbitsai/inference/pull/1551)
+
 ## 模型协议
 
 该模型根据 [CogVLM2 LICENSE](MODEL_LICENSE) 许可证发布。对于使用了Meta Llama

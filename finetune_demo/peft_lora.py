@@ -218,8 +218,6 @@ def main():
 
     ds_plugin = DeepSpeedPlugin(hf_ds_config=hf_ds_config)
     accelerator = Accelerator(deepspeed_plugin=ds_plugin)
-    zero_stage = ds_plugin.hf_ds_config.config['zero_optimization']['stage']
-    is_ds_zero_3 = zero_stage == 3
 
     tokenizer = AutoTokenizer.from_pretrained(args.model_path, trust_remote_code=True)
     model = AutoModelForCausalLM.from_pretrained(args.model_path, torch_dtype=args.torch_type, trust_remote_code=True)
@@ -323,8 +321,7 @@ def main():
                     token_type_ids=inputs['token_type_ids'],
                     attention_mask=inputs['attention_mask'],
                     images=inputs['images'],
-                    labels=labels,
-                    is_ds_zero_3=is_ds_zero_3
+                    labels=labels
                 )
 
                 loss = outputs.loss
