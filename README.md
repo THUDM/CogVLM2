@@ -10,12 +10,13 @@
     👋 Join our <a href="resources/WECHAT.md" target="_blank">Wechat</a> · 💡Try it <a href="http://36.103.203.44:7861/" target="_blank">Online</a>
 </p>
 <p align="center">
-📍Experience the larger-scale CogVLM model (GLM-4V) on the <a href="https://open.bigmodel.cn/dev/api#glm-4v">ZhipuAI Open Platform</a>.
+📍Experience the larger-scale CogVLM model on the <a href="https://open.bigmodel.cn/?utm_campaign=open&_channel_track_key=OWTVNma9">ZhipuAI Open Platform</a>.
 </p>
 
 
 ## Recent updates
-- 🔥🔥 **News**: ``2024/6/5``:We release [GLM-4V-9B](https://huggingface.co/THUDM/glm-4v-9b), which use the same data and training recipes as CogVLM2 but with GLM-9B as the language backbone. We removed visual experts to reduce the model size to 13B. More details at [GLM-4 repo](https://github.com/THUDM/GLM-4/).
+- 🔥🔥 **News**: ``2024/6/8``:We release [CogVLM2 TGI Weight](https://huggingface.co/THUDM/cogvlm2-llama3-chat-19B-tgi), which is a model can be inferred in [TGI](https://huggingface.co/docs/text-generation-inference/en/index).
+- 🔥 **News**: ``2024/6/5``:We release [GLM-4V-9B](https://huggingface.co/THUDM/glm-4v-9b), which use the same data and training recipes as CogVLM2 but with GLM-9B as the language backbone. We removed visual experts to reduce the model size to 13B. More details at [GLM-4 repo](https://github.com/THUDM/GLM-4/).
 - 🔥 **News**: ``2024/5/24``: We have released the [Int4 version model](https://huggingface.co/THUDM/cogvlm2-llama3-chat-19B-int4), which requires only 16GB of video memory for inference. You can also run on-the-fly int4 version by passing `--quant 4`.
 - 🔥 **News**: ``2024/5/20``: We released the next generation model CogVLM2, which is based on llama3-8b and is equivalent (or better) to GPT-4V in most cases ! Welcome to download!
 
