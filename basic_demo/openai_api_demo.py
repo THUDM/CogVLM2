@@ -7,6 +7,7 @@ from contextlib import asynccontextmanager
 from typing import List, Literal, Union, Tuple, Optional
 import torch
 import uvicorn
+import requests
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from loguru import logger
@@ -16,7 +17,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, TextIteratorStream
 from PIL import Image
 from io import BytesIO
 
-MODEL_PATH = 'THUDM/cogvlm2-llama3-chat-19B'
+MODEL_PATH = 'THUDM/cogvlm2-llama3-chinese-chat-19B'
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 TORCH_TYPE = torch.bfloat16 if torch.cuda.is_available() and torch.cuda.get_device_capability()[
         0] >= 8 else torch.float16
@@ -255,7 +256,10 @@ def process_history_and_images(messages: List[ChatMessageInput]) -> Tuple[
                         base64_encoded_image = image_url.split("data:image/jpeg;base64,")[1]
                         image_data = base64.b64decode(base64_encoded_image)
                         image = Image.open(BytesIO(image_data)).convert('RGB')
-                        image_list.append(image)
+                    else:
+                        response = requests.get(image_url, verify=False)
+                        image = Image.open(BytesIO(response.content)).convert('RGB')
+                    image_list.append(image)
 
         if role == 'user':
             if i == len(messages) - 1:  # 最后一条用户消息
