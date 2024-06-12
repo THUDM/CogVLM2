@@ -15,7 +15,7 @@
 
 
 ## 近期更新
-- 🔥🔥 **News**：``2024/6/8``：我们发布 [CogVLM2 TGI 模型权重](https://huggingface.co/THUDM/cogvlm2-llama3-chat-19B-tgi)，这是一个可以在 [TGI](https://huggingface.co/docs/text-generation-inference/en/index) 环境加速推理的模型。
+- 🔥🔥 **News**：``2024/6/8``：我们发布 [CogVLM2 TGI 模型权重](https://huggingface.co/THUDM/cogvlm2-llama3-chat-19B-tgi)，这是一个可以在 [TGI](https://huggingface.co/docs/text-generation-inference/en/index) 环境加速推理的模型。您可以使用[这里](https://github.com/leizhao1234/cogvlm2)的代码在TGI上运行 CogVLM2 模型。
 - 🔥 **News**：``2024/6/5``：我们发布 [GLM-4V-9B](https://huggingface.co/THUDM/glm-4v-9b)，它使用与 CogVLM2 相同的数据和训练配方，但以 GLM-9B 作为语言主干。我们删除了视觉专家，以将模型大小减小到 13B。更多详细信息，请参阅 [GLM-4 repo](https://github.com/THUDM/GLM-4/)。
 - 🔥 **News**：``2024/5/24``：我们发布了 Int4 版本模型，仅需要 16GB 显存即可进行推理。欢迎前来体验！
 - 🔥 **News**：``2024/5/20``：我们发布了下一代模型 CogVLM2，它基于 llama3-8b，在大多数情况下与 GPT-4V 相当（或更好）！欢迎下载！
