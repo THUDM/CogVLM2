@@ -20,7 +20,7 @@ from io import BytesIO
 MODEL_PATH = 'THUDM/cogvlm2-llama3-chat-19B'
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 TORCH_TYPE = torch.bfloat16 if torch.cuda.is_available() and torch.cuda.get_device_capability()[
-        0] >= 8 else torch.float16
+    0] >= 8 else torch.float16
 
 
 @asynccontextmanager
@@ -182,6 +182,7 @@ async def create_chat_completion(request: ChatCompletionRequest):
         setattr(usage, usage_key, getattr(usage, usage_key) + usage_value)
     return ChatCompletionResponse(model=request.model, choices=[choice_data], object="chat.completion", usage=usage)
 
+
 def predict(model_id: str, params: dict):
     global model, tokenizer
 
@@ -288,7 +289,8 @@ def generate_stream_cogvlm(model: AutoModelForCausalLM, tokenizer: AutoTokenizer
     max_new_tokens = int(params.get("max_tokens", 256))
     query, history, image_list = process_history_and_images(messages)
 
-    input_by_model = model.build_conversation_input_ids(tokenizer, query=query, history=history, images=[image_list[-1]])
+    input_by_model = model.build_conversation_input_ids(tokenizer, query=query, history=history,
+                                                        images=[image_list[-1]])
     inputs = {
         'input_ids': input_by_model['input_ids'].unsqueeze(0).to(DEVICE),
         'token_type_ids': input_by_model['token_type_ids'].unsqueeze(0).to(DEVICE),
@@ -310,6 +312,7 @@ def generate_stream_cogvlm(model: AutoModelForCausalLM, tokenizer: AutoTokenizer
         "max_new_tokens": max_new_tokens,
         "do_sample": True if temperature > 1e-5 else False,
         "top_p": top_p if temperature > 1e-5 else 0,
+        "top_k": 1,
         'streamer': streamer,
     }
     if temperature > 1e-5:
@@ -354,6 +357,7 @@ torch.cuda.empty_cache()
 if __name__ == "__main__":
     # Argument parser
     import argparse
+
     parser = argparse.ArgumentParser(description="CogVLM2 Web Demo")
     parser.add_argument('--quant', type=int, choices=[4, 8], help='Enable 4-bit or 8-bit precision loading', default=0)
     args = parser.parse_args()

@@ -99,6 +99,7 @@ for idx in range(0, length, batch_size):
     gen_kwargs = {
         "max_new_tokens": 2048,
         "pad_token_id": 128002,
+        "top_k": 1,
     }
 
     start = time.time()

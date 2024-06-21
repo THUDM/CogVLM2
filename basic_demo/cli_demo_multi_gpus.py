@@ -102,6 +102,7 @@ while True:
         gen_kwargs = {
             "max_new_tokens": 2048,
             "pad_token_id": 128002,
+            "top_k": 1,
         }
         with torch.no_grad():
             outputs = model.generate(**inputs, **gen_kwargs)
