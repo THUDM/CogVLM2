@@ -111,8 +111,8 @@ CogVLM2-Video 在 MVBench 数据集上的表现
 
 ## [basic_demo](basic_demo/README.md) 文件夹包括：
 
-+ **CLI** 演示。
-+ **CLI** 演示，使用多个GPU。
++ **CLI** 演示，推理 CogVLM2 模型。
++ **CLI** 演示，使用多个GPU推理 CogVLM2 模型。
 + **Web** 演示，由 chainlit 提供。
 + **API** 服务器，采用 OpenAI 格式。
 + **Int4** 可以通过 `--quant 4` 轻松启用，内存使用为16GB。
@@ -120,8 +120,11 @@ CogVLM2-Video 在 MVBench 数据集上的表现
 ## [finetune_demo](finetune_demo/README.md) 文件夹包括：
 
 + [**peft**](https://github.com/huggingface/peft) 框架的高效微调示例。
-+ [TODO] 使用 [**sat**](http://github.com/THUDM/SwissArmyTransformer) 框架的可靠微调示例。
-+ [TODO] 将 `sat` 格式的检查点转换为 `huggingface` 格式的转换脚本。
+
+## [video_demo](video_demo/README.md) 文件夹包括：
+
++ **CLI** 演示，推理 CogVLM2-Video 模型。
++ **Int4** 可以通过 `--quant 4` 轻松启用，内存使用为16GB。
 
 ## 友情链接
 

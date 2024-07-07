@@ -51,7 +51,7 @@ You can see the details of the **CogVLM2** family of open source models in the t
 | Experience Link  | [📙 Official Page](http://36.103.203.44:7861/)                                                                                                                                                                                                           | [📙 Official Page](http://36.103.203.44:7861/) [🤖 ModelScope](https://modelscope.cn/studios/ZhipuAI/Cogvlm2-llama3-chinese-chat-Demo/summary)                                                                                                                           | /                                                                                                                                                         | /                                                                                                                                                         |
 | Int4 Model       | [🤗 Huggingface](https://huggingface.co/THUDM/cogvlm2-llama3-chat-19B-int4)  [🤖 ModelScope](https://modelscope.cn/models/ZhipuAI/cogvlm2-llama3-chat-19B-int4)       [💫 Wise Model](https://wisemodel.cn/models/ZhipuAI/cogvlm2-llama3-chat-19B-int4/) | [🤗 Huggingface](https://huggingface.co/THUDM/cogvlm2-llama3-chinese-chat-19B-int4) [🤖 ModelScope](https://modelscope.cn/models/ZhipuAI/cogvlm2-llama3-chinese-chat-19B-int4) [💫 Wise Model](https://wisemodel.cn/models/ZhipuAI/cogvlm2-llama3-chinse-chat-19B-int4/) | /                                                                                                                                                         | /                                                                                                                                                         |
 | Text Length      | 8K                                                                                                                                                                                                                                                       | 8K                                                                                                                                                                                                                                                                       | 2K                                                                                                                                                        | 2K                                                                                                                                                        |
-| Image Resolution | 1344 * 1344                                                                                                                                                                                                                                              | 1344 * 1344                                                                                                                                                                                                                                                              | 224 * 224 (Video, take the first 24 frames)                                                                                                               | 224 * 224 Video, take the average 24 frames)                                                                                                              |
+| Image Resolution | 1344 * 1344                                                                                                                                                                                                                                              | 1344 * 1344                                                                                                                                                                                                                                                              | 224 * 224 (Video, take the first 24 frames)                                                                                                               | 224 * 224 (Video, take the average 24 frames)                                                                                                             |
 
 ## Benchmark
 
@@ -120,17 +120,22 @@ This open source repos will help developers to quickly get started with the basi
 source model, fine-tuning examples, OpenAI API format calling examples, etc. The specific project structure is as
 follows, you can click to enter the corresponding tutorial link:
 
-+ [basic_demo](basic_demo/README.md) folder includes:
-    + **CLI** demo.
-    + **CLI** demo with *multiple GPUs* .
-    + **Web** demo by *chainlit*.
-    + **API** server with *OpenAI format*.
-    + **Int4** is enabled easily with `--quant 4` with 16GB memory usage.
+## [basic_demo](basic_demo/README.md) folder includes:
 
-+ [finetune_demo](finetune_demo/README.md) folder includes.
-    + [**peft**](https://github.com/huggingface/peft) framework examples for efficient finetuning.
-    + [TODO] [**sat**](http://github.com/THUDM/SwissArmyTransformer) framework examples for reliable finetuning.
-    + [TODO] transformation scripts to convert checkpoints from `sat` to `huggingface` format.
++ **CLI** demo, inference CogVLM2 model.
++ **CLI** demo, inference CogVLM2 model using multiple GPUs.
++ **Web** demo, provided by chainlit.
++ **API** server, in OpenAI format.
++ **Int4** can be easily enabled with `--quant 4`, memory usage is 16GB.
+
+## [finetune_demo](finetune_demo/README.md) folder includes:
+
++ [**peft**](https://github.com/huggingface/peft) framework's efficient fine-tuning example.
+
+## [video_demo](video_demo/README.md) folder includes:
+
++ **CLI** demo, inference CogVLM2-Video model.
++ **Int4** can be easily enabled with `--quant 4`, with 16GB memory usage.
 
 ## Useful Links
 
