@@ -16,7 +16,7 @@
 ## 近期更新
 
 - 🔥 **News**: ``2024/7/8``: 我们发布了 CogVLM2 模型的视频理解版本 CogVLM2-Video
-  模型，通过抽取关键帧的方式，实现对连续画面的解读，该模型可以支持最高1分钟的视频。
+  模型，通过抽取关键帧的方式，实现对连续画面的解读，该模型可以支持最高1分钟的视频。阅读我们[博客](https://cogvlm2-video.github.io/)查看更多信息。
 - 🔥 **News**：``2024/6/8``：我们发布 [CogVLM2 TGI 模型权重](https://huggingface.co/THUDM/cogvlm2-llama3-chat-19B-tgi)
   ，这是一个可以在 [TGI](https://huggingface.co/docs/text-generation-inference/en/index)
   环境加速推理的模型。您可以使用[这里](https://github.com/leizhao1234/cogvlm2)的代码在TGI上运行 CogVLM2 模型。
