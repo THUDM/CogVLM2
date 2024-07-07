@@ -75,8 +75,7 @@
 
 ### 视频理解能力
 
-下图显示了 CogVLM2-Video
-在 [MVBench](https://github.com/OpenGVLab/Ask-Anything)、[VideoChatGPT-Bench](https://github.com/mbzuai-oryx/Video-ChatGPT)
+下图显示了 CogVLM2-Video 在 [MVBench](https://github.com/OpenGVLab/Ask-Anything)、[VideoChatGPT-Bench](https://github.com/mbzuai-oryx/Video-ChatGPT)
 和 Zero-shot VideoQA 数据集 (MSVD-QA、MSRVTT-QA、ActivityNet-QA) 上的性能。
 
 ![Quantitative Evaluation](resources/cogvlm2_video_bench.jpeg)
