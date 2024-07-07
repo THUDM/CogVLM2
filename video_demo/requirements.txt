@@ -1,0 +1,2 @@
+pytorchvideo>=0.1.5
+decord>=0.6.0

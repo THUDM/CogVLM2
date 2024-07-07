@@ -1,4 +1,5 @@
 venv
 .DS_Store
-model
+model_image
+model_video
 *.idea/
