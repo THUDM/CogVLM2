@@ -33,9 +33,8 @@ def load_video(video_path, strategy='chat'):
     if strategy == 'base':
         clip_end_sec = 60
         clip_start_sec = 0
-        duration = len(decord_vr)
         start_frame = int(clip_start_sec * decord_vr.get_avg_fps())
-        end_frame = min(duration, int(clip_end_sec * decord_vr.get_avg_fps())) if clip_end_sec is not None else duration
+        end_frame = min(total_frames, int(clip_end_sec * decord_vr.get_avg_fps())) if clip_end_sec is not None else duration
         frame_id_list = np.linspace(start_frame, end_frame - 1, num_frames, dtype=int)
     elif strategy == 'chat':
         timestamps = decord_vr.get_frame_timestamp(np.arange(total_frames))
