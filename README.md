@@ -16,7 +16,7 @@
 ## Recent updates
 
 - 🔥 **News**: ``2024/7/8``: We released the video understanding version of the CogVLM2 model, the CogVLM2-Video model.
-  By extracting key frames, it can interpret continuous images. The model can support videos of up to 1 minute.
+  By extracting keyframes, it can interpret continuous images. The model can support videos of up to 1 minute. See more in our [blog](https://cogvlm2-video.github.io/).
 - 🔥 **News**: ``2024/6/8``:We release [CogVLM2 TGI Weight](https://huggingface.co/THUDM/cogvlm2-llama3-chat-19B-tgi),
   which is a model can be inferred in [TGI](https://huggingface.co/docs/text-generation-inference/en/index). See
   Inference Code in [here](https://github.com/leizhao1234/cogvlm2)
