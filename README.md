@@ -80,9 +80,7 @@ All reviews were obtained without using any external OCR tools ("pixel only").
 ### Video Understand
 
 CogVLM2-Video achieves state-of-the-art performance on multiple video question answering tasks. The following diagram
-shows the performance of CogVLM2-Video on
-
-the [MVBench](https://github.com/OpenGVLab/Ask-Anything), [VideoChatGPT-Bench](https://github.com/mbzuai-oryx/Video-ChatGPT)
+shows the performance of CogVLM2-Video on the [MVBench](https://github.com/OpenGVLab/Ask-Anything), [VideoChatGPT-Bench](https://github.com/mbzuai-oryx/Video-ChatGPT)
 and Zero-shot VideoQA datasets (MSVD-QA, MSRVTT-QA, ActivityNet-QA). Where VCG-* refers to the VideoChatGPTBench, ZS-*
 refers to Zero-Shot VideoQA datasets and MV-* refers to main categories in the MVBench.
 
