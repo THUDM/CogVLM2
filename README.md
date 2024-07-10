@@ -1,4 +1,4 @@
-# CogVLM2
+# CogVLM2 & CogVLM2-Video
 
 [中文版README](./README_zh.md)
 
@@ -7,7 +7,7 @@
 </div>
 
 <p align="center">
-    👋 Join our <a href="resources/WECHAT.md" target="_blank">Wechat</a> · 💡Try it <a href="http://36.103.203.44:7861/" target="_blank">Online</a>
+    👋 Join our <a href="resources/WECHAT.md" target="_blank">Wechat</a> · 💡Try CogVLM2 <a href="http://36.103.203.44:7861/" target="_blank">Online</a> 💡Try CogVLM2-Video <a href="http://36.103.203.44:7868/" target="_blank">Online</a>
 </p>
 <p align="center">
 📍Experience the larger-scale CogVLM model on the <a href="https://open.bigmodel.cn/?utm_campaign=open&_channel_track_key=OWTVNma9">ZhipuAI Open Platform</a>.
@@ -16,7 +16,7 @@
 ## Recent updates
 
 - 🔥 **News**: ``2024/7/8``: We released the video understanding version of the CogVLM2 model, the CogVLM2-Video model.
-  By extracting key frames, it can interpret continuous images. The model can support videos of up to 1 minute.
+  By extracting keyframes, it can interpret continuous images. The model can support videos of up to 1 minute. See more in our [blog](https://cogvlm2-video.github.io/).
 - 🔥 **News**: ``2024/6/8``:We release [CogVLM2 TGI Weight](https://huggingface.co/THUDM/cogvlm2-llama3-chat-19B-tgi),
   which is a model can be inferred in [TGI](https://huggingface.co/docs/text-generation-inference/en/index). See
   Inference Code in [here](https://github.com/leizhao1234/cogvlm2)
@@ -80,9 +80,7 @@ All reviews were obtained without using any external OCR tools ("pixel only").
 ### Video Understand
 
 CogVLM2-Video achieves state-of-the-art performance on multiple video question answering tasks. The following diagram
-shows the performance of CogVLM2-Video on
-
-the [MVBench](https://github.com/OpenGVLab/Ask-Anything), [VideoChatGPT-Bench](https://github.com/mbzuai-oryx/Video-ChatGPT)
+shows the performance of CogVLM2-Video on the [MVBench](https://github.com/OpenGVLab/Ask-Anything), [VideoChatGPT-Bench](https://github.com/mbzuai-oryx/Video-ChatGPT)
 and Zero-shot VideoQA datasets (MSVD-QA, MSRVTT-QA, ActivityNet-QA). Where VCG-* refers to the VideoChatGPTBench, ZS-*
 refers to Zero-Shot VideoQA datasets and MV-* refers to main categories in the MVBench.
 
@@ -136,6 +134,8 @@ follows, you can click to enter the corresponding tutorial link:
 
 + **CLI** demo, inference CogVLM2-Video model.
 + **Int4** can be easily enabled with `--quant 4`, with 16GB memory usage.
++ Restful **API** server.
++ **Gradio** demo.
 
 ## Useful Links
 

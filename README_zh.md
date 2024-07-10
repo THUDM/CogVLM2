@@ -1,4 +1,4 @@
-# CogVLM2
+# CogVLM2 & CogVLM2-Video
 
 [Read this in English.](./README_en.md)
 
@@ -7,7 +7,7 @@
 <img src=resources/logo.svg width="40%"/>
 </div>
 <p align="center">
-    👋 加入我们的 <a href="resources/WECHAT.md" target="_blank">微信</a> · 💡 立刻 <a href="http://36.103.203.44:7861/" target="_blank">在线体验</a>
+    👋 加入我们的 <a href="resources/WECHAT.md" target="_blank">微信</a>  💡 在线体验<a href="http://36.103.203.44:7861/" target="_blank">CogVLM2</a> 💡 在线体验<a href="http://36.103.203.44:7868/" target="_blank">CogVLM2-Video</a> 
 </p>
 <p align="center">
 📍在 <a href="https://open.bigmodel.cn/?utm_campaign=open&_channel_track_key=OWTVNma9">开放平台</a> 体验更大规模的 CogVLM 模型。
@@ -16,7 +16,7 @@
 ## 近期更新
 
 - 🔥 **News**: ``2024/7/8``: 我们发布了 CogVLM2 模型的视频理解版本 CogVLM2-Video
-  模型，通过抽取关键帧的方式，实现对连续画面的解读，该模型可以支持最高1分钟的视频。
+  模型，通过抽取关键帧的方式，实现对连续画面的解读，该模型可以支持最高1分钟的视频。阅读我们[博客](https://cogvlm2-video.github.io/)查看更多信息。
 - 🔥 **News**：``2024/6/8``：我们发布 [CogVLM2 TGI 模型权重](https://huggingface.co/THUDM/cogvlm2-llama3-chat-19B-tgi)
   ，这是一个可以在 [TGI](https://huggingface.co/docs/text-generation-inference/en/index)
   环境加速推理的模型。您可以使用[这里](https://github.com/leizhao1234/cogvlm2)的代码在TGI上运行 CogVLM2 模型。
@@ -126,6 +126,8 @@ CogVLM2-Video 在 MVBench 数据集上的表现
 
 + **CLI** 演示，推理 CogVLM2-Video 模型。
 + **Int4** 可以通过 `--quant 4` 轻松启用，内存使用为16GB。
++ Restful API 服务。
++ Gradio 演示。
 
 ## 友情链接
 
