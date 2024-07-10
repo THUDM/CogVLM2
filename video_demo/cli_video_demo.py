@@ -118,9 +118,9 @@ while True:
         )
 
         inputs = {
-            'input_ids': inputs['input_ids'].unsqueeze(0).to('cuda'),
-            'token_type_ids': inputs['token_type_ids'].unsqueeze(0).to('cuda'),
-            'attention_mask': inputs['attention_mask'].unsqueeze(0).to('cuda'),
+            'input_ids': inputs['input_ids'].unsqueeze(0).to(DEVICE),
+            'token_type_ids': inputs['token_type_ids'].unsqueeze(0).to(DEVICE),
+            'attention_mask': inputs['attention_mask'].unsqueeze(0).to(DEVICE),
             'images': [[inputs['images'][0].to('cuda').to(TORCH_TYPE)]],
         }
         gen_kwargs = {
