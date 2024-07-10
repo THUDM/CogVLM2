@@ -19,3 +19,25 @@ Run this code to start a conversation in the command line. Please note that to r
 ```shell
 CUDA_VISIBLE_DEVICES=0 python cli_demo.py
 ```
+
+## Restful API Demo
+
+Run this code to launch a Restful API server:
+
+```shell
+python api_demo.py
+```
+
+This will start a Restful API on the 5000 port. Run following code to make a request to the server:
+```shell
+python test_api.py
+```
+
+## Gradio Demo
+
+After launch the Restful API server, you can run this code to start a Gradio web demo:
+
+```shell
+python gradio_demo.py
+```
+Then open the browser and visit `http://0.0.0.0:7868/` to chat with the model.

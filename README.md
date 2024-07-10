@@ -1,4 +1,4 @@
-# CogVLM2
+# CogVLM2 & CogVLM2-Video
 
 [中文版README](./README_zh.md)
 
@@ -7,7 +7,7 @@
 </div>
 
 <p align="center">
-    👋 Join our <a href="resources/WECHAT.md" target="_blank">Wechat</a> · 💡Try it <a href="http://36.103.203.44:7861/" target="_blank">Online</a>
+    👋 Join our <a href="resources/WECHAT.md" target="_blank">Wechat</a> · 💡Try CogVLM2 <a href="http://36.103.203.44:7861/" target="_blank">Online</a> 💡Try CogVLM2-Video <a href="http://36.103.203.44:7868/" target="_blank">Online</a>
 </p>
 <p align="center">
 📍Experience the larger-scale CogVLM model on the <a href="https://open.bigmodel.cn/?utm_campaign=open&_channel_track_key=OWTVNma9">ZhipuAI Open Platform</a>.
@@ -134,6 +134,8 @@ follows, you can click to enter the corresponding tutorial link:
 
 + **CLI** demo, inference CogVLM2-Video model.
 + **Int4** can be easily enabled with `--quant 4`, with 16GB memory usage.
++ Restful **API** server.
++ **Gradio** demo.
 
 ## Useful Links
 

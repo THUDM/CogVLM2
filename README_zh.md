@@ -1,4 +1,4 @@
-# CogVLM2
+# CogVLM2 & CogVLM2-Video
 
 [Read this in English.](./README_en.md)
 
@@ -7,7 +7,7 @@
 <img src=resources/logo.svg width="40%"/>
 </div>
 <p align="center">
-    👋 加入我们的 <a href="resources/WECHAT.md" target="_blank">微信</a> · 💡 立刻 <a href="http://36.103.203.44:7861/" target="_blank">在线体验</a>
+    👋 加入我们的 <a href="resources/WECHAT.md" target="_blank">微信</a>  💡 在线体验<a href="http://36.103.203.44:7861/" target="_blank">CogVLM2</a> 💡 在线体验<a href="http://36.103.203.44:7868/" target="_blank">CogVLM2-Video</a> 
 </p>
 <p align="center">
 📍在 <a href="https://open.bigmodel.cn/?utm_campaign=open&_channel_track_key=OWTVNma9">开放平台</a> 体验更大规模的 CogVLM 模型。
