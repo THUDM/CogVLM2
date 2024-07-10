@@ -124,6 +124,8 @@ CogVLM2-Video 在 MVBench 数据集上的表现
 
 + **CLI** 演示，推理 CogVLM2-Video 模型。
 + **Int4** 可以通过 `--quant 4` 轻松启用，内存使用为16GB。
++ Restful API 服务。
++ Gradio 演示。
 
 ## 友情链接
 
