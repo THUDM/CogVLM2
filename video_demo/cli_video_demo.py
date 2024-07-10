@@ -35,7 +35,7 @@ def load_video(video_path, strategy='chat'):
         clip_start_sec = 0
         start_frame = int(clip_start_sec * decord_vr.get_avg_fps())
         end_frame = min(total_frames,
-                        int(clip_end_sec * decord_vr.get_avg_fps())) if clip_end_sec is not None else duration
+                        int(clip_end_sec * decord_vr.get_avg_fps())) if clip_end_sec is not None else total_frames
         frame_id_list = np.linspace(start_frame, end_frame - 1, num_frames, dtype=int)
     elif strategy == 'chat':
         timestamps = decord_vr.get_frame_timestamp(np.arange(total_frames))
@@ -69,7 +69,10 @@ if args.quant == 4:
         MODEL_PATH,
         torch_dtype=TORCH_TYPE,
         trust_remote_code=True,
-        quantization_config=BitsAndBytesConfig(load_in_4bit=True),
+        quantization_config=BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_compute_dtype=TORCH_TYPE,
+        ),
         low_cpu_mem_usage=True
     ).eval()
 elif args.quant == 8:
@@ -77,7 +80,10 @@ elif args.quant == 8:
         MODEL_PATH,
         torch_dtype=TORCH_TYPE,
         trust_remote_code=True,
-        quantization_config=BitsAndBytesConfig(load_in_8bit=True),
+        quantization_config=BitsAndBytesConfig(
+            load_in_8bit=True,
+            bnb_4bit_compute_dtype=TORCH_TYPE,
+        ),
         low_cpu_mem_usage=True
     ).eval()
 else:
@@ -115,7 +121,7 @@ while True:
             'input_ids': inputs['input_ids'].unsqueeze(0).to('cuda'),
             'token_type_ids': inputs['token_type_ids'].unsqueeze(0).to('cuda'),
             'attention_mask': inputs['attention_mask'].unsqueeze(0).to('cuda'),
-            'images': [[inputs['images'][0].to('cuda').to(torch.bfloat16)]],
+            'images': [[inputs['images'][0].to('cuda').to(TORCH_TYPE)]],
         }
         gen_kwargs = {
             "max_new_tokens": 2048,
