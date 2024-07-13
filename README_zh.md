@@ -7,14 +7,14 @@
 <img src=resources/logo.svg width="40%"/>
 </div>
 <p align="center">
-    👋 加入我们的 <a href="resources/WECHAT.md" target="_blank">微信</a>  💡 在线体验<a href="http://36.103.203.44:7861/" target="_blank">CogVLM2</a> 💡 在线体验<a href="http://36.103.203.44:7868/" target="_blank">CogVLM2-Video</a> 
+    👋 加入我们的 <a href="resources/WECHAT.md" target="_blank">微信</a>  💡 在线体验<a href="http://cogvlm2-online.cogviewai.cn:7861/" target="_blank">CogVLM2</a> 💡 在线体验<a href="http://cogvlm2-online.cogviewai.cn:7868/" target="_blank">CogVLM2-Video</a> 
 </p>
 <p align="center">
 📍在 <a href="https://open.bigmodel.cn/?utm_campaign=open&_channel_track_key=OWTVNma9">开放平台</a> 体验更大规模的 CogVLM 模型。
 </p>
 
 ## 近期更新
-- 🔥 **News**: ``2024/7/12``: 我们开放了 CogVLM2-Video [在线体验网址](http://36.103.203.44:7868/)， 欢迎前往体验。
+- 🔥 **News**: ``2024/7/12``: 我们开放了 CogVLM2-Video [在线体验网址](http://cogvlm2-online.cogviewai.cn:7868/)， 欢迎前往体验。
 - 🔥 **News**: ``2024/7/8``: 我们发布了 CogVLM2 模型的视频理解版本 CogVLM2-Video
   模型，通过抽取关键帧的方式，实现对连续画面的解读，该模型可以支持最高1分钟的视频。阅读我们 [博客](https://cogvlm2-video.github.io/)
   查看更多信息。
