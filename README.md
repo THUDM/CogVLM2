@@ -7,14 +7,14 @@
 </div>
 
 <p align="center">
-    👋 Join our <a href="resources/WECHAT.md" target="_blank">Wechat</a> · 💡Try CogVLM2 <a href="http://36.103.203.44:7861/" target="_blank">Online</a> 💡Try CogVLM2-Video <a href="http://36.103.203.44:7868/" target="_blank">Online</a>
+    👋 Join our <a href="resources/WECHAT.md" target="_blank">Wechat</a> · 💡Try CogVLM2 <a href="http://cogvlm2-online.cogviewai.cn:7861/" target="_blank">Online</a> 💡Try CogVLM2-Video <a href="http://cogvlm2-online.cogviewai.cn:7868/" target="_blank">Online</a>
 </p>
 <p align="center">
 📍Experience the larger-scale CogVLM model on the <a href="https://open.bigmodel.cn/?utm_campaign=open&_channel_track_key=OWTVNma9">ZhipuAI Open Platform</a>.
 </p>
 
 ## Recent updates
-- 🔥 **News**: ``2024/7/12``: We have released CogVLM2-Video [online web demo](http://36.103.203.44:7868/), welcome to experience it.
+- 🔥 **News**: ``2024/7/12``: We have released CogVLM2-Video [online web demo](http://cogvlm2-online.cogviewai.cn:7868/), welcome to experience it.
 - 🔥 **News**: ``2024/7/8``: We released the video understanding version of the CogVLM2 model, the CogVLM2-Video model.
   By extracting keyframes, it can interpret continuous images. The model can support videos of up to 1 minute. See more
   in our [blog](https://cogvlm2-video.github.io/).
