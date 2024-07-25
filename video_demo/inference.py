@@ -29,7 +29,7 @@ def load_video(video_data, strategy='chat'):
         clip_start_sec = 0
         start_frame = int(clip_start_sec * decord_vr.get_avg_fps())
         end_frame = min(total_frames,
-                        int(clip_end_sec * decord_vr.get_avg_fps())) if clip_end_sec is not None else duration
+                        int(clip_end_sec * decord_vr.get_avg_fps())) if clip_end_sec is not None else total_frames
         frame_id_list = np.linspace(start_frame, end_frame - 1, num_frames, dtype=int)
     elif strategy == 'chat':
         timestamps = decord_vr.get_frame_timestamp(np.arange(total_frames))
@@ -57,9 +57,7 @@ tokenizer = AutoTokenizer.from_pretrained(
     # padding_side="left"
 )
 
-if torch.cuda.is_available() and torch.cuda.get_device_properties(0).total_memory < 48 * 1024 ** 3 and not args.quant:
-    print("GPU memory is less than 48GB. Please use cli_demo_multi_gpus.py or pass `--quant 4` or `--quant 8`.")
-    exit()
+
 
 model = AutoModelForCausalLM.from_pretrained(
     MODEL_PATH,
@@ -86,7 +84,7 @@ def predict(prompt, video_data, temperature):
         'input_ids': inputs['input_ids'].unsqueeze(0).to('cuda'),
         'token_type_ids': inputs['token_type_ids'].unsqueeze(0).to('cuda'),
         'attention_mask': inputs['attention_mask'].unsqueeze(0).to('cuda'),
-        'images': [[inputs['images'][0].to('cuda').to(torch.bfloat16)]],
+        'images': [[inputs['images'][0].to('cuda').to(TORCH_TYPE)]],
     }
     gen_kwargs = {
         "max_new_tokens": 2048,
