@@ -1,9 +1,12 @@
 decord>=0.6.0
+#根据https://download.pytorch.org/whl/torch/，python版本为[3.8,3.11]
 torch==2.1.0
 torchvision== 0.16.0
 pytorchvideo==0.1.5
 xformers
 transformers==4.40
+#如果运行提示transformers错误，则可能是transformers代码问题，拉取最新的试下
+#git+https://github.com/huggingface/transformers.git
 huggingface-hub>=0.23.0
 pillow
 chainlit>=1.0
@@ -14,8 +17,8 @@ loguru>=0.7.2
 pydantic>=2.7.1
 einops
 sse-starlette>=2.1.0
-bitsandbytes>=0.43.1 # for int4 quantization
 flask
 gunicorn
 gevent
 requests
+gradio
