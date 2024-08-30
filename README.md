@@ -14,6 +14,7 @@
 </p>
 
 ## Recent updates
+- 🔥 **News**: ``2024/8/30``: The [CogVLM2 paper](https://arxiv.org/abs/2408.16500) has been published on arXiv.
 - 🔥 **News**: ``2024/7/12``: We have released CogVLM2-Video [online web demo](http://cogvlm2-online.cogviewai.cn:7868/), welcome to experience it.
 - 🔥 **News**: ``2024/7/8``: We released the video understanding version of the CogVLM2 model, the CogVLM2-Video model.
   By extracting keyframes, it can interpret continuous images. The model can support videos of up to 1 minute. See more
@@ -153,6 +154,15 @@ also adhere to the [LLAMA3_LICENSE](https://llama.meta.com/llama3/license/).
 ## Citation
 
 If you find our work helpful, please consider citing the following papers
+
+```
+@article{hong2024cogvlm2,
+  title={CogVLM2: Visual Language Models for Image and Video Understanding},
+  author={Wenyi Hong and Weihan Wang and Ming Ding and Wenmeng Yu and Qingsong Lv and Yan Wang and Yean Cheng and Shiyu Huang and Junhui Ji and others},
+  journal={arXiv preprint arXiv:2408.16500},
+  year={2024}
+}
+```
 
 ```
 @misc{wang2023cogvlm,

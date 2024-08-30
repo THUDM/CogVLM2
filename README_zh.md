@@ -14,6 +14,7 @@
 </p>
 
 ## 近期更新
+- 🔥 **News**: ``2024/8/30``: [CogVLM2论文](https://arxiv.org/abs/2408.16500)已经发布到arXiv。
 - 🔥 **News**: ``2024/7/12``: 我们开放了 CogVLM2-Video [在线体验网址](http://cogvlm2-online.cogviewai.cn:7868/)， 欢迎前往体验。
 - 🔥 **News**: ``2024/7/8``: 我们发布了 CogVLM2 模型的视频理解版本 CogVLM2-Video
   模型，通过抽取关键帧的方式，实现对连续画面的解读，该模型可以支持最高1分钟的视频。阅读我们 [博客](https://cogvlm2-video.github.io/)
@@ -144,6 +145,15 @@ CogVLM2-Video 在 MVBench 数据集上的表现
 ## 引用
 
 如果您发现我们的工作有所帮助，请考虑引用以下论文:
+
+```
+@article{hong2024cogvlm2,
+  title={CogVLM2: Visual Language Models for Image and Video Understanding},
+  author={Wenyi Hong and Weihan Wang and Ming Ding and Wenmeng Yu and Qingsong Lv and Yan Wang and Yean Cheng and Shiyu Huang and Junhui Ji and others},
+  journal={arXiv preprint arXiv:2408.16500},
+  year={2024}
+}
+```
 
 ```
 @misc{wang2023cogvlm,
