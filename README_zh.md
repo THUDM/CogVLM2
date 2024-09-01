@@ -149,7 +149,7 @@ CogVLM2-Video 在 MVBench 数据集上的表现
 ```
 @article{hong2024cogvlm2,
   title={CogVLM2: Visual Language Models for Image and Video Understanding},
-  author={Wenyi Hong and Weihan Wang and Ming Ding and Wenmeng Yu and Qingsong Lv and Yan Wang and Yean Cheng and Shiyu Huang and Junhui Ji and others},
+  author={Hong, Wenyi and Wang, Weihan and Ding, Ming and Yu, Wenmeng and Lv, Qingsong and Wang, Yan and Cheng, Yean and Huang, Shiyu and Ji, Junhui and Xue, Zhao and others},
   journal={arXiv preprint arXiv:2408.16500},
   year={2024}
 }
