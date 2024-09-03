@@ -62,20 +62,21 @@ You can see the details of the **CogVLM2** family of open source models in the t
 Our open source models have achieved good results in many lists compared to the previous generation of CogVLM open
 source models. Its excellent performance can compete with some non-open source models, as shown in the table below:
 
-| Model                      | Open Source | LLM Size | TextVQA  | DocVQA   | ChartQA  | OCRbench | MMMU     | MMVet    | MMBench  |
-|----------------------------|-------------|----------|----------|----------|----------|----------|----------|----------|----------|
-| CogVLM1.1                  | ✅           | 7B       | 69.7     | -        | 68.3     | 590      | 37.3     | 52.0     | 65.8     |
-| LLaVA-1.5                  | ✅           | 13B      | 61.3     | -        | -        | 337      | 37.0     | 35.4     | 67.7     |
-| Mini-Gemini                | ✅           | 34B      | 74.1     | -        | -        | -        | 48.0     | 59.3     | 80.6     |
-| LLaVA-NeXT-LLaMA3          | ✅           | 8B       | -        | 78.2     | 69.5     | -        | 41.7     | -        | 72.1     |
-| LLaVA-NeXT-110B            | ✅           | 110B     | -        | 85.7     | 79.7     | -        | 49.1     | -        | 80.5     |
-| InternVL-1.5               | ✅           | 20B      | 80.6     | 90.9     | **83.8** | 720      | 46.8     | 55.4     | **82.3** |
-| QwenVL-Plus                | ❌           | -        | 78.9     | 91.4     | 78.1     | 726      | 51.4     | 55.7     | 67.0     |
-| Claude3-Opus               | ❌           | -        | -        | 89.3     | 80.8     | 694      | **59.4** | 51.7     | 63.3     |
-| Gemini Pro 1.5             | ❌           | -        | 73.5     | 86.5     | 81.3     | -        | 58.5     | -        | -        |
-| GPT-4V                     | ❌           | -        | 78.0     | 88.4     | 78.5     | 656      | 56.8     | **67.7** | 75.0     |
-| **CogVLM2-LLaMA3**         | ✅           | 8B       | 84.2     | **92.3** | 81.0     | 756      | 44.3     | 60.4     | 80.5     |
-| **CogVLM2-LLaMA3-Chinese** | ✅           | 8B       | **85.0** | 88.4     | 74.7     | **780**  | 42.8     | 60.5     | 78.9     |
+
+| Model                      | Open Source | LLM Size | TextVQA  | DocVQA   | ChartQA  | OCRbench | VCR_EASY | VCR_HARD | MMMU     | MMVet    | MMBench  |
+|----------------------------|-------------|----------|----------|----------|----------|----------|-------------|-------------|----------|----------|----------|
+| CogVLM1.1                  | ✅           | 7B       | 69.7     | -        | 68.3     | 590      | 73.9        | 34.6        | 37.3     | 52.0     | 65.8     |
+| LLaVA-1.5                  | ✅           | 13B      | 61.3     | -        | -        | 337      | -           | -           | 37.0     | 35.4     | 67.7     |
+| Mini-Gemini                | ✅           | 34B      | 74.1     | -        | -        | -        | -           | -           | 48.0     | 59.3     | 80.6     |
+| LLaVA-NeXT-LLaMA3          | ✅           | 8B       | -        | 78.2     | 69.5     | -        | -           | -           | 41.7     | -        | 72.1     |
+| LLaVA-NeXT-110B            | ✅           | 110B     | -        | 85.7     | 79.7     | -        | -           | -           | 49.1     | -        | 80.5     |
+| InternVL-1.5               | ✅           | 20B      | 80.6     | 90.9     | **83.8** | 720      | 14.7        | 2.0         | 46.8     | 55.4     | **82.3** |
+| QwenVL-Plus                | ❌           | -        | 78.9     | 91.4     | 78.1     | 726      | -           | -           | 51.4     | 55.7     | 67.0     |
+| Claude3-Opus               | ❌           | -        | -        | 89.3     | 80.8     | 694      | 63.85       | 37.8        | **59.4** | 51.7     | 63.3     |
+| Gemini Pro 1.5             | ❌           | -        | 73.5     | 86.5     | 81.3     | -        | 62.73       | 28.1        | 58.5     | -        | -        |
+| GPT-4V                     | ❌           | -        | 78.0     | 88.4     | 78.5     | 656      | 52.04       | 25.8        | 56.8     | **67.7** | 75.0     |
+| **CogVLM2-LLaMA3**         | ✅           | 8B       | 84.2     | **92.3** | 81.0     | 756      | **83.3**    | **38.0**        | 44.3     | 60.4     | 80.5     |
+| **CogVLM2-LLaMA3-Chinese** | ✅           | 8B       | **85.0** | 88.4     | 74.7     | **780**  | 79.9        | 25.1        | 42.8     | 60.5     | 78.9     |
 
 All reviews were obtained without using any external OCR tools ("pixel only").
 
