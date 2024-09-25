@@ -14,6 +14,7 @@
 </p>
 
 ## Recent updates
+- 🔥 **News**: ``2024/9/25``: Web demos are availble on Replicate! Try CogVLM2 here [![Replicate](https://replicate.com/chenxwh/cogvlm2/badge)](https://replicate.com/chenxwh/cogvlm2) and CogVLM2-Video here [![Replicate](https://replicate.com/chenxwh/cogvlm2-video/badge)](https://replicate.com/chenxwh/cogvlm2-video).
 - 🔥 **News**: ``2024/8/30``: The [CogVLM2 paper](https://arxiv.org/abs/2408.16500) has been published on arXiv.
 - 🔥 **News**: ``2024/7/12``: We have released CogVLM2-Video [online web demo](http://cogvlm2-online.cogviewai.cn:7868/), welcome to experience it.
 - 🔥 **News**: ``2024/7/8``: We released the video understanding version of the CogVLM2 model, the CogVLM2-Video model.

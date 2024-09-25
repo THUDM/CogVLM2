@@ -1,0 +1,40 @@
+# Configuration for Cog ⚙️
+# Reference: https://cog.run/yaml
+
+build:
+  # set to true if your model requires a GPU
+  gpu: true
+
+  # a list of ubuntu apt packages to install
+  system_packages:
+    - "libgl1-mesa-glx"
+    - "libglib2.0-0"
+
+  # python version in the form '3.11' or '3.11.4'
+  python_version: "3.11"
+
+  # a list of packages in the format <package-name>==<version>
+  python_packages:
+    - decord>=0.6.0
+    - pytorchvideo==0.1.5
+    - xformers
+    - torch==2.1.0
+    - torchvision==0.16.0
+    - transformers==4.42.4
+    - huggingface-hub>=0.23.0
+    - pillow
+    - chainlit>=1.0
+    - timm>=0.9.16
+    - openai>=1.30.1
+    - loguru>=0.7.2
+    - accelerate
+    - einops
+    - sse-starlette>=2.1.0
+    - bitsandbytes>=0.43.1 # for int4 quantization
+  run:
+    - pip install ipython
+    - curl -o /usr/local/bin/pget -L "https://github.com/replicate/pget/releases/download/v0.8.2/pget_linux_x86_64" && chmod +x /usr/local/bin/pget
+
+# predict.py defines how predictions are run on your model
+# predict: "predict.py:Predictor"
+predict: "predict_video.py:Predictor"
