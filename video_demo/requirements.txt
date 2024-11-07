@@ -4,7 +4,7 @@ torch==2.1.0
 torchvision== 0.16.0
 pytorchvideo==0.1.5
 xformers
-transformers==4.42.4
+transformers==4.42.0
 #如果运行提示transformers错误，则可能是transformers代码问题，拉取最新的试下
 #git+https://github.com/huggingface/transformers.git
 huggingface-hub>=0.23.0
