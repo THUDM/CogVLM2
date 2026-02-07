@@ -9,6 +9,8 @@ import argparse
 from PIL import Image
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 
+from transformers_compat import patch_model_for_transformers_compat
+
 MODEL_PATH = "THUDM/cogvlm2-llama3-chat-19B"
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 TORCH_TYPE = torch.bfloat16 if torch.cuda.is_available() and torch.cuda.get_device_capability()[
@@ -55,6 +57,9 @@ else:
         torch_dtype=TORCH_TYPE,
         trust_remote_code=True
     ).eval().to(DEVICE)
+
+# Apply compatibility patch for transformers >= 4.45
+patch_model_for_transformers_compat(model)
 
 while True:
     image_path = input("image path >>>>> ")
